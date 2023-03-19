@@ -1,6 +1,6 @@
 ﻿namespace OnlineShopWebApp.Models
 {
-    public class Products
+    public class Product
     {
         private int instanceCounter = 0;
         public int Id { get; }
@@ -8,7 +8,7 @@
         public decimal Cost { get; }
         public string Description { get; }
 
-        public Products(string name, decimal cost, string description)
+        public Product(string name, decimal cost, string description)
         {
             Id = instanceCounter;
             Name = name;
