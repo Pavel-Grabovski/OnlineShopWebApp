@@ -6,9 +6,17 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ProductRepository productRepository;
+
+        public HomeController()
+        {
+            productRepository = new ProductRepository();
+        }
+
         public IActionResult Index(string name, int age)
         {
-            return View();
+            List<Product> products = productRepository.GetAll();
+            return View(products);
         }
 
         public IActionResult Privacy()
