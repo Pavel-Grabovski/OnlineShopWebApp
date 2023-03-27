@@ -1,4 +1,5 @@
 ﻿using OnlineShopWebApp.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineShopWebApp
 {
@@ -6,12 +7,12 @@ namespace OnlineShopWebApp
     {
         private static List<Product> products = new List<Product>()
         {
-            new Product("Name1", 10, "Decs1"),
-            new Product("Name2", 20, "Decs2"),
-            new Product("Name3", 30, "Decs3"),
-            new Product("Name4", 40, "Decs4"),
-            new Product("Name5", 50, "Decs5"),
-            new Product("Name6", 60, "Decs6"),
+            new Product("Name1", 10, "Decs1", "/images/image1.jpg"),
+            new Product("Name2", 20, "Decs2", "/images/image2.jpg"),
+            new Product("Name3", 30, "Decs3", "/images/image3.png"),
+            new Product("Name4", 40, "Decs4", "/images/image4.jpg"),
+            new Product("Name5", 50, "Decs5", "/images/image5.jpg"),
+            new Product("Name6", 60, "Decs6", "/images/image6.jpg"),
         };
         public List<Product> GetAll()
         {

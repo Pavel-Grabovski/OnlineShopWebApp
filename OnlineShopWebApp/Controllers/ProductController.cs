@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -11,14 +12,10 @@ namespace OnlineShopWebApp.Controllers
             productRepository = new ProductRepository();
         }
 
-        public string Index(int id)
+        public IActionResult Index(int id)
         {
-           var product = productRepository.TryGetById(id);
-            if(product == null)
-            {
-                return $"Продукта с id={id} не существует";
-            }
-            return $"{product}\n{product.Description}";
+            var product = productRepository.TryGetById(id);
+            return View(product);
         }
     }
 }
