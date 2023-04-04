@@ -2,11 +2,11 @@
 
 namespace OnlineShopWebApp
 {
-    public class CartsRepository
+    public class CartsInMemoryRepository: ICartsRepository
     {
         private List<Cart> carts = new List<Cart>();
 
-        internal void Add(Product product, string userId)
+        public void Add(Product product, string userId)
         {
             var exisitingCart = TryGetByUserId(userId);
             if (exisitingCart == null) 
@@ -46,7 +46,7 @@ namespace OnlineShopWebApp
             }
         }
 
-        internal Cart TryGetByUserId(string userId)
+        public Cart TryGetByUserId(string userId)
         {
             return carts.FirstOrDefault(x => x.UserId == userId);
         }

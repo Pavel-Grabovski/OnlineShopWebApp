@@ -3,7 +3,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineShopWebApp
 {
-    public class ProductsRepository
+    public class ProductsInMemoryRepository : IProductsRepository
     {
         private List<Product> products = new List<Product>()
         {

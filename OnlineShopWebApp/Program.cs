@@ -3,8 +3,8 @@ using OnlineShopWebApp;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddSingleton<ProductsRepository>();
-builder.Services.AddSingleton<CartsRepository>();
+builder.Services.AddSingleton<IProductsRepository, ProductsInMemoryRepository>();
+builder.Services.AddSingleton<ICartsRepository, CartsInMemoryRepository>();
 
 
 // Add services to the container.
