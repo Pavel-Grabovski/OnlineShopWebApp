@@ -7,9 +7,9 @@ namespace OnlineShopWebApp.Controllers
     {
         private readonly ProductsRepository productRepository;
 
-        public ProductController()
+        public ProductController(ProductsRepository productsRepository)
         {
-            productRepository = new ProductsRepository();
+            this.productRepository = productsRepository;
         }
 
         public IActionResult Index(int id)
