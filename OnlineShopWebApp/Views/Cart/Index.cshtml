@@ -1,6 +1,6 @@
 ﻿@model Cart
 
-@if (Model == null)
+@if (Model == null || Model.Items.Count == 0)
 {
     <h3>Корзина пустая</h3>
 }
@@ -11,26 +11,37 @@ else
             <table class="table">
                 <thead>
                     <tr>
+                        <th class="col-1">Идентификатор</th>
                         <th>Название</th>
                         <th>Цена руб.</th>
                         <th>Количество</th>
                         <th>Стоимость руб.</th>
+                        <th class="col-1"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach(var item in Model.Items)
                     {
                         <tr>
-                            <th>@item.Product.Name</th>
-                            <th>@item.Product.Cost</th>
-                            <th>@item.Amount</th>
-                            <th>@item.Cost</th>
+                            <td>@item.Product.Id</td>
+                            <td>@item.Product.Name</td>
+                            <td>@item.Product.Cost</td>
+                            <td>
+                                <a class="btn btn-danger" href="/cart/decreaseAmount?productId=@item.Product.Id" role="button">-</a>
+                                @item.Amount
+                                <a class="btn btn-success" href="/cart/add?productId=@item.Product.Id" role="button">+</a>
+                             </td>
+                            <td>@item.Cost</td>
+                            <td>
+                                <a class="btn btn-danger" href="/cart/remove?productId=@item.Product.Id" role="button">x</a>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
             <div class="text-md-end">
                 <h3>Итого: @Model.Cost</h3>
+                <a class="btn btn-danger" href="/cart/clear" role="button">Очистить корзину</a>
             </div>
             <div class="text-md-center">
                 <a class="btn btn-success" href="home/index" role="button">Продолжить покупки</a>

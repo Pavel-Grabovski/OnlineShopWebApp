@@ -3,9 +3,9 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineShopWebApp
 {
-    public class ProductsRepository
+    public class ProductsInMemoryRepository : IProductsRepository
     {
-        private static List<Product> products = new List<Product>()
+        private List<Product> products = new List<Product>()
         {
             new Product("Спартанский шлем", 10, "Decs1", "/images/image1.jpg"),
             new Product("Винтовка M-16", 20, "Decs2", "/images/image2.jpg"),
