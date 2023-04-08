@@ -12,5 +12,12 @@
                 return Items.Sum(x => x.Cost);
             }
         }
+        public int Amount
+        {
+            get
+            {
+                return Items.Sum(x => x.Amount);
+            }
+        }
     }
 }
