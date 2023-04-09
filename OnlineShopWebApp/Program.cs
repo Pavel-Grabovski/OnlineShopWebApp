@@ -2,7 +2,7 @@ using OnlineShopWebApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddSingleton<IFavoritesRepository, FavoritesInMemoryRepository>();
 builder.Services.AddSingleton<IProductsRepository, ProductsInMemoryRepository>();
 builder.Services.AddSingleton<ICartsRepository, CartsInMemoryRepository>();
 builder.Services.AddSingleton<IOrdersRepository, OrdersInMemoryRepository>();
