@@ -9,14 +9,14 @@
         {
             get
             {
-                return Items.Sum(x => x.Cost);
+                return Items?.Sum(x => x.Cost) ?? 0;
             }
         }
         public int Amount
         {
             get
             {
-                return Items.Sum(x => x.Amount);
+                return Items?.Sum(x => x.Amount) ?? 0;
             }
         }
     }

@@ -7,7 +7,6 @@ namespace OnlineShopWebApp.Controllers
     public class HomeController : Controller
     {
         private readonly IProductsRepository productRepository;
-
         public HomeController(IProductsRepository productRepository)
         {
             this.productRepository = productRepository;
@@ -15,7 +14,7 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Index(string name, int age)
         {
-            List<Product> products = productRepository.GetAll();
+            var products = productRepository.GetAll();
             return View(products);
         }
 
