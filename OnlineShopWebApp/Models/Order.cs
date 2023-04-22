@@ -2,8 +2,13 @@
 {
     public class Order
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Patronymic { get; set; }
+
+        public Guid Id { get; set; }
+        public UserInfo UserInfo { get; set; }
+        public Cart Cart { get; set; }
+        public Order()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 }
