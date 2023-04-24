@@ -1,0 +1,28 @@
+﻿<form method="post">
+    <div class="row text-center">
+        <div class="col"></div>
+        <div class="col">
+
+            <h1 class="h3">Регистрация</h1>
+
+            <div class="form-floating">
+                <input type="email" class="form-control" name="email" placeholder="name@example.com">
+                <label for="floatingInput">Введите E-mail</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" placeholder="password">
+                <label>Пароль</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="confirmPassword" class="form-control" placeholder="confirmPassword">
+                <label>Подтвердите пароль</label>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Register">
+                Зарегистрироваться
+            </button>
+
+        </div>
+        <div class="col"></div>
+    </div>
+</form>
