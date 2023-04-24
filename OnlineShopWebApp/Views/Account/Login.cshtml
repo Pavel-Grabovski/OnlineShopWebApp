@@ -1,0 +1,30 @@
+﻿<form method="post">
+    <div class="row text-center">
+        <div class="col"></div>
+        <div class="col">
+
+            <h1 class="h3">Авторизация</h1>
+
+            <div class="form-floating">
+                <input type="email" class="form-control" name="email" placeholder="name@example.com">
+                <label for="floatingInput">Введите E-mail</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" placeholder="password">
+                <label for="floatingPassword">Пароль</label>
+            </div>
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="rememberMe" value="true">  Запомнить меня?
+                </label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Login">
+                Войти
+            </button>
+            <a class ="nav-link" href="#" role="button">Регистрация нового пользователя</a>
+
+        </div>
+        <div class="col"></div>
+    </div>
+</form>
