@@ -4,6 +4,13 @@ namespace OnlineShopWebApp.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly IProductsRepository productRepository;
+
+        public AdminController(IProductsRepository productRepository)
+        {
+            this.productRepository = productRepository;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -18,7 +25,13 @@ namespace OnlineShopWebApp.Controllers
         }
         public IActionResult Products()
         {
-            return View();
+            var products = productRepository.GetAll();
+            return View(products);
+        }
+        public IActionResult DeleteProduct(int productId)
+        {
+            productRepository.DeleteProduct(productId);
+            return RedirectToAction("Products");
         }
         public IActionResult Roles()
         {
