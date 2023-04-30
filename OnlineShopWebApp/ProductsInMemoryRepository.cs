@@ -14,6 +14,13 @@ namespace OnlineShopWebApp
             new Product("Плов", 50, "Decs5", "/images/image5.jpg"),
             new Product("Лев", 60, "Decs6", "/images/image6.jpg"),
         };
+
+        public void DeleteProduct(int productId)
+        {
+            var product = TryGetById(productId);
+            products.Remove(product);
+        }
+
         public List<Product> GetAll()
         {
             return products;
@@ -23,5 +30,6 @@ namespace OnlineShopWebApp
         {
             return products.FirstOrDefault(product => product.Id == id);
         }
+
     }
 }

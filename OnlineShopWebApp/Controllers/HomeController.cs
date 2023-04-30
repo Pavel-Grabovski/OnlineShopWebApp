@@ -12,7 +12,7 @@ namespace OnlineShopWebApp.Controllers
             this.productRepository = productRepository;
         }
 
-        public IActionResult Index(string name, int age)
+        public IActionResult Index()
         {
             var products = productRepository.GetAll();
             return View(products);
