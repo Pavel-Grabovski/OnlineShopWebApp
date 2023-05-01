@@ -13,7 +13,12 @@ namespace OnlineShopWebApp.Controllers
         [HttpPost]
         public IActionResult Login(Login login)
         {
-            return RedirectToAction("Index", "Home");
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(login);
         }
 
         public IActionResult Register()
@@ -24,11 +29,11 @@ namespace OnlineShopWebApp.Controllers
         [HttpPost]
         public IActionResult Register(Register register)
         {
-            if(register.Password == register.ConfirmPassword)
+            if(ModelState.IsValid && register.Password == register.ConfirmPassword)
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View();
+            return View(register);
         }
     }
 }
