@@ -7,13 +7,13 @@
             <h1 class="h3">Авторизация</h1>
 
             <div class="form-floating">
-                <label for="floatingInput" asp-for="Email">Email</label>
                 <input type="email" class="form-control" placeholder="name@example.com" asp-for="Email" />
+                <label asp-for="Email">Email</label>
                 <span class="text-danger" asp-validation-for="Email"></span>
             </div>
             <div class="form-floating">
-                <label asp-for="Password">Пароль</label>
                 <input class="form-control" type="password" placeholder="password" type="password" asp-for="Password" />
+                <label asp-for="Password">Пароль</label>
                 <span class="text-danger" asp-validation-for="Password"></span>
             </div>
 
