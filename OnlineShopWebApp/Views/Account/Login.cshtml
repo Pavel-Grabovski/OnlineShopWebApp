@@ -1,4 +1,5 @@
-﻿<form method="post">
+﻿@model Login
+<form method="post" asp-action="Account" asp-controller="Login">
     <div class="row text-center">
         <div class="col"></div>
         <div class="col">
@@ -6,12 +7,14 @@
             <h1 class="h3">Авторизация</h1>
 
             <div class="form-floating">
-                <input type="email" class="form-control" name="email" placeholder="name@example.com">
-                <label for="floatingInput">Введите E-mail</label>
+                <input type="email" class="form-control" placeholder="name@example.com" asp-for="Email" />
+                <label asp-for="Email">Email</label>
+                <span class="text-danger" asp-validation-for="Email"></span>
             </div>
             <div class="form-floating">
-                <input type="password" name="password" class="form-control" placeholder="password">
-                <label for="floatingPassword">Пароль</label>
+                <input class="form-control" type="password" placeholder="password" type="password" asp-for="Password" />
+                <label asp-for="Password">Пароль</label>
+                <span class="text-danger" asp-validation-for="Password"></span>
             </div>
 
             <div class="checkbox mb-3">
@@ -19,10 +22,11 @@
                     <input type="checkbox" name="rememberMe" value="true">  Запомнить меня?
                 </label>
             </div>
+
             <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Login">
                 Войти
             </button>
-            <a class ="nav-link" href="#" role="button">Регистрация нового пользователя</a>
+            <a class="nav-link" href="/account/register" role="button">Регистрация нового пользователя</a>
 
         </div>
         <div class="col"></div>
