@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -30,9 +31,22 @@ namespace OnlineShopWebApp.Controllers
         }
         public IActionResult DeleteProduct(int productId)
         {
-            productRepository.DeleteProduct(productId);
+            productRepository.Delete(productId);
             return RedirectToAction("Products");
         }
+
+        public IActionResult NewProduct()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddNewProduct(Product product)
+        {
+            productRepository.Add(product);
+            return RedirectToAction("Products");
+        }
+
         public IActionResult Roles()
         {
             return View();
