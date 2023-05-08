@@ -40,22 +40,29 @@ namespace OnlineShopWebApp.Controllers
             var product = productRepository.TryGetById(productId);
                 return View(product);
         }
+
+        [HttpPost]
         public IActionResult SaveProduct(Product product)
         {
-            var editProduct = productRepository.TryGetById(product.Id);
-
-            if(editProduct != null)
+            if (ModelState.IsValid)
             {
-                editProduct.Name = product.Name;
-                editProduct.Description = product.Description;
-                editProduct.Cost = product.Cost;
+                var editProduct = productRepository.TryGetById(product.Id);
 
-                if (product.ImagePath != null)
+                if (editProduct != null)
                 {
-                    editProduct.ImagePath = product.ImagePath;
+                    editProduct.Name = product.Name;
+                    editProduct.Description = product.Description;
+                    editProduct.Cost = product.Cost;
+
+                    if (product.ImagePath != null)
+                    {
+                        editProduct.ImagePath = product.ImagePath;
+                    }
                 }
+                return RedirectToAction("Products");
             }
-            return RedirectToAction("Products");
+            return View("ProductEditor", product);
+           
         }
         public IActionResult NewProduct()
         {
@@ -65,8 +72,12 @@ namespace OnlineShopWebApp.Controllers
         [HttpPost]
         public IActionResult AddNewProduct(Product product)
         {
-            productRepository.Add(product);
-            return RedirectToAction("Products");
+            if (ModelState.IsValid)
+            {
+                productRepository.Add(product);
+                return RedirectToAction("Products");
+            }
+            return View("NewProduct", product);
         }
 
         public IActionResult Roles()

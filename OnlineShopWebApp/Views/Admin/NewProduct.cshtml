@@ -10,18 +10,18 @@
                 <input type="file" class="form-control" id="inputGroupFile01">
             </div>*@
             <div class="form-floating">
-                <input class="form-control" name="Name" placeholder="Наименование товара" />
-                <label >Наименование товара</label>
-                <span></span>
+                <input type="text" class="form-control" name="Name" placeholder="Наименование товара" asp-for="Name" />
+                <label asp-for="Name">Наименование</label>
+                <span class="text-danger" asp-validation-for="Name"></span>
             </div>
             <div class="form-floating">
                 <textarea class="form-control" name="Description" placeholder="Описание" style="height: 200px"></textarea>
-                <label for="floatingTextarea2">Описание</label>
+                <label>Описание</label>
             </div>
             <div class="form-floating">
-                <input class="form-control" name="Cost" placeholder="Цена" />
-                <label>Стоимость</label>
-                <span></span>
+                <input type="number" class="form-control" name="Cost" placeholder="Цена" asp-for="Cost" />
+                <label asp-for="Cost">Стоимость</label>
+                <span class="text-danger" asp-validation-for="Cost"></span>
             </div>
             <button class="w-100 btn btn-lg btn-success" type="submit" asp-area="" asp-controller="Admin" asp-action="AddNewProduct">
                 Добавить
