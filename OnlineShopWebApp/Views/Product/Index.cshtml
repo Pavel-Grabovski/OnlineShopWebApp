@@ -2,7 +2,14 @@
 
 <div class="row">
     <div class="col-6">
-        <img class="card-img-top" src=@Model.ImagePath alt="Изображение товара" />
+        @if (@Model.ImagePath != null)
+        {
+            <img class="card-img-top" src=@Model.ImagePath alt="Изображение товара">
+        }
+        else
+        {
+            <img class="card-img-top" src="/images/NotImage.jpg" alt="Изображение товара">
+        }
     </div>
     <div class="col-6">
         <a style="color:black" href="/product/index/@Model.Id">

@@ -15,9 +15,13 @@ namespace OnlineShopWebApp
             new Product("Лев", 60, "Decs6", "/images/image6.jpg"),
         };
 
-        public void DeleteProduct(int productId)
+        public void Add(Product product)
         {
-            var product = TryGetById(productId);
+            products.Add(product);  
+        }
+
+        public void Delete(Product product)
+        {
             products.Remove(product);
         }
 

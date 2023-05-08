@@ -1,0 +1,32 @@
+﻿@model Product
+<form method="post">
+    <div class="row">
+        <div class="col-6">
+            <img class="card-img-top" src=@Model.ImagePath alt="Изображение товара" />
+        </div>
+        <div class="col-6">
+            @*<div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                <input type="file" class="form-control" id="inputGroupFile01">
+            </div>*@
+            <input name="Id" value=@Model.Id hidden/>
+            <div class="form-floating">
+                <input class="form-control" type="text" name="Name" placeholder="Наименование" value="@Model.Name" asp-for="Name" />
+                <label asp-for="Name" >Наименование товара</label>
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-floating">
+                <textarea class="form-control" name="Description" placeholder="Описание" style="height: 200px">@Model.Description</textarea>
+                <label for="floatingTextarea2">Описание</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" class="form-control" name="Cost" placeholder="Цена" asp-for="Cost" />
+                <label asp-for="Cost">Стоимость</label>
+                <span class="text-danger" asp-validation-for="Cost"></span>
+            </div>
+            <button class="w-100 btn btn-lg btn-success" type="submit" asp-area="" asp-controller="Admin" asp-action="SaveProduct">
+                Сохранить
+            </button>
+        </div>
+    </div>
+</form>
