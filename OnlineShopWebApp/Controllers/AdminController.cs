@@ -31,10 +31,32 @@ namespace OnlineShopWebApp.Controllers
         }
         public IActionResult DeleteProduct(int productId)
         {
-            productRepository.Delete(productId);
+            var product = productRepository.TryGetById(productId);
+            productRepository.Delete(product);
             return RedirectToAction("Products");
         }
+        public IActionResult ProductEditor(int productId)
+        {
+            var product = productRepository.TryGetById(productId);
+                return View(product);
+        }
+        public IActionResult SaveProduct(Product product)
+        {
+            var editProduct = productRepository.TryGetById(product.Id);
 
+            if(editProduct != null)
+            {
+                editProduct.Name = product.Name;
+                editProduct.Description = product.Description;
+                editProduct.Cost = product.Cost;
+
+                if (product.ImagePath != null)
+                {
+                    editProduct.ImagePath = product.ImagePath;
+                }
+            }
+            return RedirectToAction("Products");
+        }
         public IActionResult NewProduct()
         {
             return View();

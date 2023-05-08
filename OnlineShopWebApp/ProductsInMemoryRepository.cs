@@ -20,9 +20,8 @@ namespace OnlineShopWebApp
             products.Add(product);  
         }
 
-        public void Delete(int productId)
+        public void Delete(Product product)
         {
-            var product = TryGetById(productId);
             products.Remove(product);
         }
 
