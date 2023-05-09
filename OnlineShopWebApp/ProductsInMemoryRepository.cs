@@ -25,7 +25,7 @@ namespace OnlineShopWebApp
             products.Remove(product);
         }
 
-        public List<Product> GetAll()
+        public ICollection<Product> GetAll()
         {
             return products;
         }

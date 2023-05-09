@@ -17,14 +17,17 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult Index()
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
-            return View(cart);
+
+            ViewBag.Cart = cart;
+
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Buy(UserInfo userInfo, UserInfo userInfo_2)
+        public IActionResult Buy(UserInfo userInfo)
         {
 
-            var existingCart = cartsRepository.TryGetByUserId(Constants.UserId);
+            var existingCart = cartsRepository.TryGetByUserId(userInfo.UserId);
             var order = new Order
             {
                 UserInfo = userInfo,

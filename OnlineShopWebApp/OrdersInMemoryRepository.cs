@@ -9,5 +9,15 @@ namespace OnlineShopWebApp
         {
             orders.Add(order);
         }
+
+        public ICollection<Order> GetAll()
+        {
+            return orders;
+        }
+
+        public Order TryGetById(string guid)
+        {
+            return orders.FirstOrDefault(order => order.Id.ToString() == guid);
+        }
     }
 }

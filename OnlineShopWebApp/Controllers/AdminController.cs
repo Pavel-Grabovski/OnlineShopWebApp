@@ -6,10 +6,12 @@ namespace OnlineShopWebApp.Controllers
     public class AdminController : Controller
     {
         private readonly IProductsRepository productRepository;
+        private readonly IOrdersRepository ordersRepository;
 
-        public AdminController(IProductsRepository productRepository)
+        public AdminController(IProductsRepository productRepository, IOrdersRepository ordersRepository)
         {
             this.productRepository = productRepository;
+            this.ordersRepository = ordersRepository;
         }
 
         public IActionResult Index()
@@ -18,8 +20,17 @@ namespace OnlineShopWebApp.Controllers
         }
         public IActionResult Orders()
         {
-            return View();
+            var orders = ordersRepository.GetAll();
+            return View(orders);
         }
+        public IActionResult OrderEditor(string OrderId)
+        {
+            var order = ordersRepository.TryGetById(OrderId);
+            return View(order);
+        }
+
+
+
         public IActionResult Users()
         {
             return View();
@@ -38,7 +49,7 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult ProductEditor(int productId)
         {
             var product = productRepository.TryGetById(productId);
-                return View(product);
+            return View(product);
         }
 
         [HttpPost]
