@@ -5,7 +5,7 @@
         <div class="col">
 
             <h1 class="h3">Авторизация</h1>
-
+            
             <div class="form-floating">
                 <input type="email" class="form-control" placeholder="name@example.com" asp-for="Email" />
                 <label asp-for="Email">Email</label>
@@ -22,6 +22,8 @@
                     <input type="checkbox" name="rememberMe" value="true">  Запомнить меня?
                 </label>
             </div>
+
+            @*<div class="text-danger font-weight-bold" asp-validation-summary=ModelOnly></div>*@
 
             <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Login">
                 Войти

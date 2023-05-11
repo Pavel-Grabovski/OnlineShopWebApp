@@ -18,7 +18,7 @@ namespace OnlineShopWebApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return View(login);
+            return RedirectToAction("Login");
         }
 
         public IActionResult Register()
@@ -33,7 +33,7 @@ namespace OnlineShopWebApp.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(register);
+            return RedirectToAction("Register");
         }
     }
 }

@@ -10,6 +10,8 @@ namespace OnlineShopWebApp.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Не указан пароль")]
+        [MinLength(8, ErrorMessage = "Минимальная длина пароля - 8 символов.")]
+        [MaxLength(100, ErrorMessage = "Максимальная длина пароля - 100 символов.")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Не указан повторный пароль пароль")]

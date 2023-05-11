@@ -23,6 +23,9 @@
                 <label asp-for="ConfirmPassword">Подтвердите пароль</label>
                 <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
             </div>
+
+            @*<div class="text-danger font-weight-bold" asp-validation-summary="All"></div>*@
+
             <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Register">
                 Зарегистрироваться
             </button>
