@@ -6,6 +6,6 @@ namespace OnlineShopWebApp
     {
         void Add(Order order);
         ICollection<Order> GetAll();
-        Order TryGetById(string guid);
+        Order TryGetByOrderId(string guid);
     }
 }

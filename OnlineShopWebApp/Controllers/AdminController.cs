@@ -25,7 +25,7 @@ namespace OnlineShopWebApp.Controllers
         }
         public IActionResult OrderEditor(string OrderId)
         {
-            var order = ordersRepository.TryGetById(OrderId);
+            var order = ordersRepository.TryGetByOrderId(OrderId);
             return View(order);
         }
 

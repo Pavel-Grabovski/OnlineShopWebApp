@@ -15,7 +15,7 @@ namespace OnlineShopWebApp
             return orders;
         }
 
-        public Order TryGetById(string guid)
+        public Order TryGetByOrderId(string guid)
         {
             return orders.FirstOrDefault(order => order.Id.ToString() == guid);
         }
