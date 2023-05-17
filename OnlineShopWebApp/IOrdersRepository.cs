@@ -7,5 +7,7 @@ namespace OnlineShopWebApp
         void Add(Order order);
         ICollection<Order> GetAll();
         Order TryGetByOrderId(string guid);
+        Order TryGetByOrderId(Guid id);
+        void UpdateStatus(Guid id, OrderStatus status);
     }
 }

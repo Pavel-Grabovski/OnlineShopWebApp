@@ -7,34 +7,47 @@ namespace OnlineShopWebApp.Controllers
     {
         private readonly IProductsRepository productRepository;
         private readonly IOrdersRepository ordersRepository;
+        private readonly IRolesRepository rolesRepository;
 
-        public AdminController(IProductsRepository productRepository, IOrdersRepository ordersRepository)
+        public AdminController(IProductsRepository productRepository, IOrdersRepository ordersRepository, IRolesRepository rolesRepository)
         {
             this.productRepository = productRepository;
             this.ordersRepository = ordersRepository;
+            this.rolesRepository = rolesRepository;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+
+        #region Orders
         public IActionResult Orders()
         {
             var orders = ordersRepository.GetAll();
             return View(orders);
         }
-        public IActionResult OrderEditor(string OrderId)
+        public IActionResult OrderDetails(Guid id)
         {
-            var order = ordersRepository.TryGetByOrderId(OrderId);
+            var order = ordersRepository.TryGetByOrderId(id);
             return View(order);
         }
 
+        public IActionResult SaveOrderStatus(Guid id,  OrderStatus status)
+        {
+            ordersRepository.UpdateStatus(id, status);
+            return RedirectToAction("Orders");
+        }
+
+        #endregion
 
 
         public IActionResult Users()
         {
             return View();
         }
+
+        #region Products
         public IActionResult Products()
         {
             var products = productRepository.GetAll();
@@ -90,10 +103,41 @@ namespace OnlineShopWebApp.Controllers
             }
             return View("NewProduct", product);
         }
+        #endregion
+
+        #region Roles
 
         public IActionResult Roles()
         {
+            var roles = rolesRepository.GetAll();
+            return View(roles);
+        }
+        public IActionResult DeleteRole(string name)
+        {
+            rolesRepository.Delete(name);
+            return RedirectToAction("Roles");
+        }
+
+        public IActionResult AddRole()
+        {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult AddRole(Role role)
+        {
+            if(rolesRepository.TryGetByName(role.Name) != null)
+            {
+                ModelState.AddModelError("", "Такая роль уже существует");
+            }
+
+            if(ModelState.IsValid)
+            {
+                rolesRepository.Add(role);
+                return RedirectToAction("Roles");
+            }
+            return View(role);
+        }
+        #endregion
     }
 }

@@ -14,6 +14,7 @@ namespace OnlineShopWebApp.Models
 
         [Required(ErrorMessage = "Не указано стоимость.")]
         [Range(0, int.MaxValue, ErrorMessage = "Некоректная стоимость")]
+        [DataType(DataType.Currency, ErrorMessage = "Введите число")]
         public decimal Cost { get; set; }
 
         [ValidateNever]
@@ -22,19 +23,18 @@ namespace OnlineShopWebApp.Models
         [ValidateNever]
         public string ImagePath { get; set; }
 
-        public Product(string name, decimal cost, string description, string imagePath)
+        public Product(string name, decimal cost, string description, string imagePath) : this()  
         {
-            Id = instanceCounter;
             Name = name;
             Cost = cost;
             Description = description;
-            instanceCounter++;
             ImagePath = imagePath;
         }
 
         public Product()
         {
             Id = instanceCounter;
+            instanceCounter++;
         }
 
         public override string ToString()
