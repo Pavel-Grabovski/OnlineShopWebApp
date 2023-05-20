@@ -19,9 +19,4 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="7.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Admin\Views\Admin\Product\" />
-    <Folder Include="Areas\Admin\Views\Admin\User\" />
-  </ItemGroup>
-
 </Project>

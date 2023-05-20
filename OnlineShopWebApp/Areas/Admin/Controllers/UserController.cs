@@ -4,13 +4,13 @@ using OnlineShopWebApp.Models;
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class AdminController : Controller
+    public class UserController : Controller
     {
         private readonly IProductsRepository productRepository;
         private readonly IOrdersRepository ordersRepository;
         private readonly IRolesRepository rolesRepository;
 
-        public AdminController(IProductsRepository productRepository, IOrdersRepository ordersRepository, IRolesRepository rolesRepository)
+        public UserController(IProductsRepository productRepository, IOrdersRepository ordersRepository, IRolesRepository rolesRepository)
         {
             this.productRepository = productRepository;
             this.ordersRepository = ordersRepository;
