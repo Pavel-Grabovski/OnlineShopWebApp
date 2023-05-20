@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopWebApp.Models;
 
-namespace OnlineShopWebApp.Controllers
+namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class AdminController : Controller
     {
         private readonly IProductsRepository productRepository;
@@ -33,7 +34,7 @@ namespace OnlineShopWebApp.Controllers
             return View(order);
         }
 
-        public IActionResult SaveOrderStatus(Guid id,  OrderStatus status)
+        public IActionResult SaveOrderStatus(Guid id, OrderStatus status)
         {
             ordersRepository.UpdateStatus(id, status);
             return RedirectToAction("Orders");
@@ -86,7 +87,7 @@ namespace OnlineShopWebApp.Controllers
                 return RedirectToAction("Products");
             }
             return View("ProductEditor", product);
-           
+
         }
         public IActionResult NewProduct()
         {
@@ -126,12 +127,12 @@ namespace OnlineShopWebApp.Controllers
         [HttpPost]
         public IActionResult AddRole(Role role)
         {
-            if(rolesRepository.TryGetByName(role.Name) != null)
+            if (rolesRepository.TryGetByName(role.Name) != null)
             {
                 ModelState.AddModelError("", "Такая роль уже существует");
             }
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 rolesRepository.Add(role);
                 return RedirectToAction("Roles");
