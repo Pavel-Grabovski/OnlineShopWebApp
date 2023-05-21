@@ -53,20 +53,20 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             return View(nameof(Edit), product);
 
         }
-        public IActionResult NewProduct()
+        public IActionResult Add()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult AddNewProduct(Product product)
+        public IActionResult Add(Product product)
         {
             if (ModelState.IsValid)
             {
                 productRepository.Add(product);
                 return RedirectToAction(nameof(Index));
             }
-            return View(nameof(NewProduct), product);
+            return View(nameof(Add), product);
         }
     }
 }
