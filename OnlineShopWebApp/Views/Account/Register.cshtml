@@ -10,21 +10,18 @@
             <div class="form-floating">
                 <input type="email" class="form-control" placeholder="name@example.com" asp-for="Email" />
                 <label asp-for="Email">Email</label>
-                <span class="text-danger" asp-validation-for="Email"></span>
             </div>
 
             <div class="form-floating">
                 <input class="form-control" type="password" placeholder="password" type="password" asp-for="Password" />
                 <label asp-for="Password">Пароль</label>
-                <span class="text-danger" asp-validation-for="Password"></span>
             </div>
             <div class="form-floating">
                 <input class="form-control" type="password" placeholder="confirmPassword" type="password" asp-for="ConfirmPassword" />
                 <label asp-for="ConfirmPassword">Подтвердите пароль</label>
-                <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
             </div>
 
-            @*<div class="text-danger font-weight-bold" asp-validation-summary="All"></div>*@
+            <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
 
             <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Register">
                 Зарегистрироваться
