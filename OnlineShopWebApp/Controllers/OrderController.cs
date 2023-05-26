@@ -24,7 +24,7 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Buy(UserInfo userInfo)
+        public IActionResult Buy(UserDeliveryInfo userInfo)
         {
             if(ModelState.IsValid)
             {
