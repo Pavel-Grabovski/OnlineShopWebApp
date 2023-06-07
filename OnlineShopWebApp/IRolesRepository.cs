@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp
 {
-    public interface IRolesRepository
+    public interface IRolesRepository:
     {
         ICollection<Role> GetAll();
         Role TryGetByName(string name);

@@ -8,5 +8,6 @@ namespace OnlineShopWebApp
         UserAccount TryGetByUserName(string email);
         void Delete(UserAccount user);
         void Add(UserAccount user);
+        void ChangePassword(string email, string password);
     }
 }
