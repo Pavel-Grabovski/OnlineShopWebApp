@@ -24,10 +24,13 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             productRepository.Delete(product);
             return RedirectToAction(nameof(Index));
         }
+
         public IActionResult Edit(int id)
         {
             var product = productRepository.TryGetById(id);
-            return View(product);
+            if (product != null)
+                return View(product);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
