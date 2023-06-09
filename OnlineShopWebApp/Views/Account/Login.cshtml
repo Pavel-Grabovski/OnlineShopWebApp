@@ -5,16 +5,13 @@
         <div class="col">
 
             <h1 class="h3">Авторизация</h1>
-            
             <div class="form-floating">
                 <input type="email" class="form-control" placeholder="name@example.com" asp-for="Email" />
                 <label asp-for="Email">Email</label>
-                <span class="text-danger" asp-validation-for="Email"></span>
             </div>
             <div class="form-floating">
                 <input class="form-control" type="password" placeholder="password" type="password" asp-for="Password" />
                 <label asp-for="Password">Пароль</label>
-                <span class="text-danger" asp-validation-for="Password"></span>
             </div>
 
             <div class="checkbox mb-3">
@@ -23,7 +20,7 @@
                 </label>
             </div>
 
-            @*<div class="text-danger font-weight-bold" asp-validation-summary=ModelOnly></div>*@
+            <div class="text-danger font-weight-bold" asp-validation-summary=All></div>
 
             <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Login">
                 Войти

@@ -17,7 +17,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">
+                        <a class="nav-link text-dark" asp-area="Admin" asp-controller="Order" asp-action="Index">
                             Админ
                         </a>
                     </li>
@@ -35,8 +35,8 @@
                                 Личный кабинет
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/account/login">Авторизация</a></li>
-                                <li><a class="dropdown-item" href="/account/register">Регистрация</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Авторизация</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a></li>
                             </ul>
                         </div>
                     </li>

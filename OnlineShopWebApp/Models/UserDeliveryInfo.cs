@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace OnlineShopWebApp.Models
 {
-    public class UserInfo
+    public class UserDeliveryInfo
     {
         [ValidateNever]
         public string UserId { get; set; }
