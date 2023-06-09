@@ -1,17 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Models;
+using System.Collections;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class UserController : Controller
     {
-       private readonly IUsersManager usersManager;
+        private readonly IUsersManager usersManager;
+        private readonly IRolesRepository rolesRepository;
 
-        public UserController(IUsersManager usersManager)
+        public UserController(IUsersManager usersManager, IRolesRepository rolesRepository)
         {
             this.usersManager = usersManager;
+            this.rolesRepository = rolesRepository;
         }
 
         public IActionResult Index()
@@ -29,6 +32,10 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         public IActionResult Details(string email)
         {
             var userAccounts = usersManager.TryGetByUserName(email);
+
+            //var roles = rolesRepository.GetAll();
+            //ViewBag.Roles = roles;
+
             return View(userAccounts);
         }
 

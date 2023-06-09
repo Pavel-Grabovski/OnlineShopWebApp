@@ -11,5 +11,6 @@ namespace OnlineShopWebApp.Models
         public string Surname { get; set; }
         public string Patronymic { get; set; }
         public string Address { get; set; }
+        public string Role { get; set; }
     }
 }
