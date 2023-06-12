@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShopWebApp.Models;
+using OnlineShopDB;
+using OnlineShopDB.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -19,22 +20,25 @@ namespace OnlineShopWebApp.Controllers
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
             return View(cart);
         }
-        public IActionResult Add(int productId)
+        public IActionResult Add(Guid guid)
         {
-            var product = productRepository.TryGetById(productId);
-            cartsRepository.Add(product, Constants.UserId);
+            var productDB = productRepository.TryGetById(guid);
+
+
+
+            //cartsRepository.Add(product, Constants.UserId);
             return RedirectToAction("Index");
         }
-        public IActionResult DecreaseAmount(int productId)
+        public IActionResult DecreaseAmount(Guid guid)
         {
-            var product = productRepository.TryGetById(productId);
-            cartsRepository.DecreaseAmount(product, Constants.UserId);
+            var product = productRepository.TryGetById(guid);
+            //cartsRepository.DecreaseAmount(product, Constants.UserId);
             return RedirectToAction("Index");
         }
-        public IActionResult Remove(int productId)
+        public IActionResult Remove(Guid guid)
         {
-            var product = productRepository.TryGetById(productId);
-            cartsRepository.Remove(product, Constants.UserId);
+            var product = productRepository.TryGetById(guid);
+            //cartsRepository.Remove(product, Constants.UserId);
             return RedirectToAction("Index");
         }
         public IActionResult Clear()

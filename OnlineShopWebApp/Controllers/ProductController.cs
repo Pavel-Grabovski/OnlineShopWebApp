@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopDB;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -11,10 +13,23 @@ namespace OnlineShopWebApp.Controllers
             this.productRepository = productsRepository;
         }
 
-        public IActionResult Index(int id)
+        public IActionResult Index(Guid id)
         {
             var product = productRepository.TryGetById(id);
-            return View(product);
+
+            if (product != null)
+            {
+                var productVM = new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Cost = product.Cost,
+                    Description = product.Description,
+                    ImagePath = product.ImagePath,
+                };
+                return View(productVM);
+            }
+            return RedirectToAction(nameof(Index), "Home");
         }
     }
 }

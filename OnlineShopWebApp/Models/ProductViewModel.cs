@@ -3,10 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShopWebApp.Models
 {
-    public class Product
+    public class ProductViewModel
     {
-        private static int instanceCounter = 0;
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Не указано имя.")]
         [MinLength(2, ErrorMessage = "Короткое имя")]
@@ -22,24 +21,5 @@ namespace OnlineShopWebApp.Models
 
         [ValidateNever]
         public string ImagePath { get; set; }
-
-        public Product(string name, decimal cost, string description, string imagePath) : this()  
-        {
-            Name = name;
-            Cost = cost;
-            Description = description;
-            ImagePath = imagePath;
-        }
-
-        public Product()
-        {
-            Id = instanceCounter;
-            instanceCounter++;
-        }
-
-        public override string ToString()
-        {
-            return $"{Id}\n{Name}\n{Cost}";
-        }
     }
 }

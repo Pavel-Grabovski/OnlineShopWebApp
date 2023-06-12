@@ -1,8 +1,8 @@
-﻿@model Product
+﻿@model ProductViewModel
 <form method="post">
     <div class="row">
         <div class="col-6">
-            <img class="card-img-top" src=@Model.ImagePath alt="Изображение товара" />
+            <img class="card-img-top" name="ImagePath" src=@Model.ImagePath alt="Изображение товара" />
         </div>
         <div class="col-6">
             <input name="Id" value=@Model.Id hidden/>

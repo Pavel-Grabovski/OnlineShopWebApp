@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopDB;
+using OnlineShopDB.Models;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
@@ -15,45 +17,67 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            var products = productRepository.GetAll();
-            return View(products);
+            var productsDB = productRepository.GetAll();
+
+            var productsViewModels = new List<ProductViewModel>();
+            foreach (var productDB in productsDB)
+            {
+                var productVM = new ProductViewModel
+                {
+                    Id = productDB.Id,
+                    Name = productDB.Name,
+                    Cost = productDB.Cost,
+                    Description = productDB.Description,
+                    ImagePath = productDB.ImagePath
+                };
+                productsViewModels.Add(productVM);
+            }
+
+            return View(productsViewModels);
         }
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             var product = productRepository.TryGetById(id);
             productRepository.Delete(product);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(Guid id)
         {
             var product = productRepository.TryGetById(id);
             if (product != null)
-                return View(product);
+            {
+                var productVM = new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Cost = product.Cost,
+                    Description = product.Description,
+                    ImagePath = product.ImagePath,
+                };
+                return View(productVM);
+            }
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public IActionResult Save(Product product)
+        public IActionResult Save(ProductViewModel productVM)
         {
             if (ModelState.IsValid)
             {
-                var editProduct = productRepository.TryGetById(product.Id);
+                var editProduct = productRepository.TryGetById(productVM.Id);
 
                 if (editProduct != null)
                 {
-                    editProduct.Name = product.Name;
-                    editProduct.Description = product.Description;
-                    editProduct.Cost = product.Cost;
-
-                    if (product.ImagePath != null)
-                    {
-                        editProduct.ImagePath = product.ImagePath;
-                    }
+                    editProduct.Name = productVM.Name;
+                    editProduct.Description = productVM.Description;
+                    editProduct.Cost = productVM.Cost;
+                    editProduct.ImagePath = productVM.ImagePath;
+                    productRepository.Edit(editProduct);
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(nameof(Edit), product);
+            return View(nameof(Edit), productVM);
 
         }
         public IActionResult Add()
@@ -62,14 +86,21 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Product product)
+        public IActionResult Add(ProductViewModel productVM)
         {
             if (ModelState.IsValid)
             {
-                productRepository.Add(product);
+                var productDB = new Product
+                {
+                    Name = productVM.Name,
+                    Cost = productVM.Cost,
+                    Description = productVM.Description,
+                    ImagePath = productVM.ImagePath,
+                };
+                productRepository.Add(productDB);
                 return RedirectToAction(nameof(Index));
             }
-            return View(nameof(Add), product);
+            return View(nameof(Add), productVM);
         }
     }
 }
