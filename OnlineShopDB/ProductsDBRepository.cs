@@ -1,5 +1,4 @@
 ﻿using OnlineShopDB.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineShopDB
 {

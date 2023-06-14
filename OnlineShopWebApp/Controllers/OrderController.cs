@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShopDB;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
@@ -32,7 +33,7 @@ namespace OnlineShopWebApp.Controllers
                 var order = new Order
                 {
                     UserInfo = userInfo,
-                    Cart = existingCart,
+                    //Cart = existingCart,
                 };
 
                 ordersRepository.Add(order);

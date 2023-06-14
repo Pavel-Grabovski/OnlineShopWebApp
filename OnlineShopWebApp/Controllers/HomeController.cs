@@ -18,15 +18,15 @@ namespace OnlineShopWebApp.Controllers
             var productsDB = productRepository.GetAll();
 
             var productsViewModels = new List<ProductViewModel>();
-            foreach(var productDB in productsDB)
+            foreach(var product in productsDB)
             {
                 var productViewModel = new ProductViewModel
                 {
-                    Id = productDB.Id,
-                    Name = productDB.Name,
-                    Cost = productDB.Cost,
-                    Description = productDB.Description,
-                    ImagePath = productDB.ImagePath
+                    Id = product.Id,
+                    Name = product.Name,
+                    Cost = product.Cost,
+                    Description = product.Description,
+                    ImagePath = product.ImagePath
                 };
                 productsViewModels.Add(productViewModel);
             }
