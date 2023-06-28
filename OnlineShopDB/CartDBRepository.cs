@@ -1,4 +1,5 @@
-﻿using OnlineShopDB.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShopDB.Models;
 
 namespace OnlineShopDB
 {
@@ -10,51 +11,66 @@ namespace OnlineShopDB
         {
             this.dataBaseContext = dataBaseContext;
         }
-        public List<CartItem> GetAll(Guid cartId)
+        public ICollection<CartItem> GetAll(string userId)
         {
-            return dataBaseContext.CartItems.Where(x => x.CartId == cartId).ToList();
+            var cart = TryGetByUserId(userId);
+            if (cart != null)
+            {
+                return cart.CartItems;
+            }
+            return null;
         }
         public void Add(Product product, string userId)
         {
-            var сart = TryGetByUserId(userId);
-            if (сart == null)
+            var cart = TryGetByUserId(userId);
+            if (cart == null)
             {
-                сart = new Cart
+                cart = new Cart
                 {
                     Id = Guid.NewGuid(),
                     UserId = userId
                 };
-                dataBaseContext.Carts.Add(сart);
-            }
-
-            var cartItems = dataBaseContext.CartItems.Where(x => x.CartId == сart.Id).ToArray();
-            var cartItem = cartItems.FirstOrDefault(x => x.ProductId == product.Id);
-
-            if (cartItem != null)
-            {
-                cartItem.Amount++;
+                cart.CartItems = new List<CartItem>
+                {
+                    new CartItem
+                    {
+                        Id = Guid.NewGuid(),
+                        Product = product,
+                        Amount = 1
+                    }
+                };
+                dataBaseContext.Carts.Add(cart);
             }
             else
             {
-                cartItem = new CartItem
+                var duplCartItem = cart.CartItems.FirstOrDefault(x => x.Product.Id == product.Id);
+                if (duplCartItem != null)
                 {
-                    Id = Guid.NewGuid(),
-                    ProductId = product.Id,
-                    Amount = 1,
-                    CartId = сart.Id
-                };
-                dataBaseContext.Add(cartItem);
+                    duplCartItem.Amount++;
+                }
+                else
+                {
+                    var cartItem = new CartItem
+                    {
+                        Id = Guid.NewGuid(),
+                        Product = product,
+                        Amount = 1
+                    };
+                    cart.CartItems.Add(cartItem);
+                    dataBaseContext.CartItems.Add(cartItem);
+                }
             }
+
             dataBaseContext.SaveChanges();
         }
 
         public void Clear(string userId)
         {
-            var cart = dataBaseContext.Carts.FirstOrDefault(x => x.UserId == userId);
-            if(cart != null)
+            var cart = TryGetByUserId(userId);
+            if (cart != null)
             {
-                var cartItems = dataBaseContext.CartItems.Where(x => x.CartId == cart.Id).ToArray();
-                foreach(var item in cartItems)
+                var cartItems = cart.CartItems;
+                foreach (var item in cartItems)
                 {
                     dataBaseContext.CartItems.Remove(item);
                 }
@@ -63,45 +79,35 @@ namespace OnlineShopDB
             dataBaseContext.SaveChanges();
         }
 
-        public void DecreaseAmount(Guid cartItemId, string userId)
+        public void DecreaseAmount(Guid productId, string userId)
         {
-            var cartItem = dataBaseContext.CartItems.FirstOrDefault(x => x.Id == cartItemId);
-            var cart = dataBaseContext.Carts.FirstOrDefault(x => x.UserId == userId);
+            var cart = TryGetByUserId(userId);
 
-            if (cart != null && cartItem != null && cartItem.CartId == cart.Id)
+            if (cart != null)
             {
-                if(cartItem.Amount > 1)
+                var cartItem = cart.CartItems.FirstOrDefault(x => x.Product.Id == productId);
+                if (cartItem != null)
                 {
                     cartItem.Amount--;
+                    if (cartItem.Amount == 0)
+                    {
+                        cart.CartItems.Remove(cartItem);
+                    }
+                    dataBaseContext.SaveChanges();
                 }
-                else
-                {
-                    dataBaseContext.CartItems.Remove(cartItem);
-                }
-                dataBaseContext.SaveChanges();
             }
         }
 
         public Cart TryGetByUserId(string userId)
         {
-            return dataBaseContext.Carts.FirstOrDefault(x => x.UserId == userId);
+            return dataBaseContext.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.UserId == userId);
         }
 
-        public CartItem GetCartItem(Guid cartItemId)
+        public void Remove(string userId)
         {
-            return dataBaseContext.CartItems.FirstOrDefault(x => x.Id == cartItemId);
-        }
-
-        public void Remove(Guid cartItemId, string userId)
-        {
-            var cartItem = dataBaseContext.CartItems.FirstOrDefault(x => x.Id == cartItemId);
-            var cart = dataBaseContext.Carts.FirstOrDefault(x => x.UserId == userId);
-
-            if (cartItem != null && cartItem.CartId == cart.Id)
-            {
-                dataBaseContext.CartItems.Remove(cartItem);
-                dataBaseContext.SaveChanges();
-            }
+            var cart = TryGetByUserId(userId);
+            dataBaseContext.Carts.Remove(cart);
+            dataBaseContext.SaveChanges();
         }
     }
 }
