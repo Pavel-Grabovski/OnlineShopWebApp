@@ -74,12 +74,13 @@ namespace OnlineShopDB
                 {
                     dataBaseContext.CartItems.Remove(item);
                 }
+                cart.CartItems?.Clear();
                 dataBaseContext.Carts.Remove(cart);
             }
             dataBaseContext.SaveChanges();
         }
 
-        public void DecreaseAmount(Guid productId, string userId)
+        public void DecreaseAmount(string userId, Guid productId)
         {
             var cart = TryGetByUserId(userId);
 
@@ -91,7 +92,7 @@ namespace OnlineShopDB
                     cartItem.Amount--;
                     if (cartItem.Amount == 0)
                     {
-                        cart.CartItems.Remove(cartItem);
+                        Remove(userId, productId);
                     }
                     dataBaseContext.SaveChanges();
                 }
@@ -103,10 +104,19 @@ namespace OnlineShopDB
             return dataBaseContext.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.UserId == userId);
         }
 
-        public void Remove(string userId)
+        public void Remove(string userId, Guid productId)
         {
             var cart = TryGetByUserId(userId);
-            dataBaseContext.Carts.Remove(cart);
+            if(cart!= null)
+            {
+                var cartItem = cart.CartItems.FirstOrDefault(x => x.Product.Id == productId);
+                if(cartItem != null)
+                {
+                    cart.CartItems.Remove(cartItem);
+                    dataBaseContext.CartItems.Remove(cartItem);
+                }
+            }
+
             dataBaseContext.SaveChanges();
         }
     }

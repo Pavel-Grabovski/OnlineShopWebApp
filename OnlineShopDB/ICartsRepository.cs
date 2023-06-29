@@ -6,9 +6,9 @@ namespace OnlineShopDB
     {
         void Add(Product product, string userId);
         void Clear(string userId);
-        void DecreaseAmount(Guid productId, string userId);
+        void DecreaseAmount(string userId, Guid productId);
         ICollection<CartItem> GetAll(string userId);
-        void Remove(string userId);
+        void Remove(string userId, Guid productId);
         Cart TryGetByUserId(string userId);
     }
 }

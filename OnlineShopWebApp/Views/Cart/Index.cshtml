@@ -25,13 +25,13 @@ else
                             <td>@item.Product.Name</td>
                             <td>@item.Product.Cost</td>
                             <td>
-                                <a class="btn btn-danger" href="/cart/decreaseAmount?cartItemId=@item.Id" role="button">-</a>
+                                <a class="btn btn-danger" href="/cart/decreaseAmount?productId=@item.Product.Id" role="button">-</a>
                                 @item.Amount
                                 <a class="btn btn-success" href="/cart/add?productId=@item.Product.Id" role="button">+</a>
                              </td>
                             <td>@item.Cost</td>
                             <td>
-                                <a class="btn btn-danger" href="/cart/remove?cartItemId=@item.Id" role="button">x</a>
+                                <a class="btn btn-danger" href="/cart/remove?productId=@item.Product.Id" role="button">x</a>
                             </td>
                         </tr>
                     }

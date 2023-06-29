@@ -34,14 +34,14 @@ namespace OnlineShopWebApp.Controllers
             cartsRepository.Add(product, Constants.UserId);
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult DecreaseAmount(Guid cartItemId)
+        public IActionResult DecreaseAmount(Guid productId)
         {
-            cartsRepository.DecreaseAmount(cartItemId, Constants.UserId);
+            cartsRepository.DecreaseAmount(Constants.UserId, productId);
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Remove(Guid cartItemId)
+        public IActionResult Remove(Guid productId)
         {
-            //cartsRepository.Remove(cartItemId, Constants.UserId);
+            cartsRepository.Remove(Constants.UserId, productId);
             return RedirectToAction("Index");
         }
         public IActionResult Clear()
