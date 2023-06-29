@@ -51,6 +51,17 @@ namespace OnlineShopWebApp.Helpers
             return cartVM;
         }
 
+        public static ICollection<ProductViewModel> ToProductViewModels(this ICollection<Product> products)
+        {
+            ICollection<ProductViewModel> productsVM = new List<ProductViewModel>();
+            foreach(var product in products)
+            {
+                var productVM = product.ToProductViewModel();
+                productsVM.Add(productVM);
+            }
+            return productsVM;
+        }
+
 
         //public static OrderViewModel ToOrderViewModel(this Order orderDb)
         //{

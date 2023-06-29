@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopDB;
+using OnlineShopWebApp.Helpers;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -16,26 +17,26 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Index()
         {
-            var favorites = favoritesRepository.TryGetByUserId(Constants.UserId);
-            return View(favorites);
+            var favorites = favoritesRepository.GetAll(Constants.UserId);
+            var favoritesVM = favorites.ToProductViewModels();
+            return View(favoritesVM);
         }
         public IActionResult Add(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            //favoritesRepository.Add(product, Constants.UserId);
-            return RedirectToAction("Index");
+            favoritesRepository.Add(Constants.UserId, product);
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Remove(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            //favoritesRepository.Remove(product, Constants.UserId);
-            return RedirectToAction("Index");
+            favoritesRepository.Remove(Constants.UserId, product);
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Clear()
         {
-
             favoritesRepository.Clear(Constants.UserId);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

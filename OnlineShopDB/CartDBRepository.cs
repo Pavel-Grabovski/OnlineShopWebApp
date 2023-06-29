@@ -27,14 +27,12 @@ namespace OnlineShopDB
             {
                 cart = new Cart
                 {
-                    Id = Guid.NewGuid(),
                     UserId = userId
                 };
                 cart.CartItems = new List<CartItem>
                 {
                     new CartItem
                     {
-                        Id = Guid.NewGuid(),
                         Product = product,
                         Amount = 1
                     }
@@ -52,7 +50,6 @@ namespace OnlineShopDB
                 {
                     var cartItem = new CartItem
                     {
-                        Id = Guid.NewGuid(),
                         Product = product,
                         Amount = 1
                     };
@@ -69,11 +66,7 @@ namespace OnlineShopDB
             var cart = TryGetByUserId(userId);
             if (cart != null)
             {
-                var cartItems = cart.CartItems;
-                foreach (var item in cartItems)
-                {
-                    dataBaseContext.CartItems.Remove(item);
-                }
+                dataBaseContext.CartItems.RemoveRange(cart.CartItems);
                 cart.CartItems?.Clear();
                 dataBaseContext.Carts.Remove(cart);
             }

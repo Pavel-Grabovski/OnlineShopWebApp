@@ -15,7 +15,7 @@ builder.Services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(c
 
 // Add services to the container.
 builder.Services.AddTransient<IProductsRepository, ProductsDBRepository>();
-builder.Services.AddSingleton<IFavoritesRepository, FavoritesInMemoryRepository>();
+builder.Services.AddTransient<IFavoritesRepository, FavoriteDBRepository>();
 builder.Services.AddTransient<ICartsRepository, CartDBRepository>();
 builder.Services.AddSingleton<IOrdersRepository, OrdersInMemoryRepository>();
 builder.Services.AddSingleton<IRolesRepository, RolesInMemoryRepository>();
