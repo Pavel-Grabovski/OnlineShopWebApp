@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
+using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 using System.Diagnostics;
 
@@ -14,8 +16,9 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Index()
         {
-            var products = productRepository.GetAll();
-            return View(products);
+            var productsDb = productRepository.GetAll();
+            var productsViewModels = productsDb.ToProductsViewModels();
+            return View(productsViewModels);
         }
 
         public IActionResult Privacy()

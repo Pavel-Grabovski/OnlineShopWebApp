@@ -5,7 +5,7 @@ namespace OnlineShopWebApp
     public class FavoritesInMemoryRepository : IFavoritesRepository
     {
         private List<Favorites> favorites = new List<Favorites>();
-        public void Add(Product product, string userId)
+        public void Add(ProductViewModel product, string userId)
         {
             var exisitingFavorites = TryGetByUserId(userId);
             if(exisitingFavorites == null)
@@ -49,7 +49,7 @@ namespace OnlineShopWebApp
             }
         }
 
-        public void Remove(Product product, string userId)
+        public void Remove(ProductViewModel product, string userId)
         {
             var exisitingFavorites = TryGetByUserId(userId);
             if( exisitingFavorites != null)

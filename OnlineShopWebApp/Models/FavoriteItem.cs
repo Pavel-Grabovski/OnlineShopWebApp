@@ -3,6 +3,6 @@
     public class FavoriteItem
     {
         public Guid Id { get; set; }
-        public Product Product { get; set; }
+        public ProductViewModel Product { get; set; }
     }
 }

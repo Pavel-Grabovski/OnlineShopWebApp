@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -18,16 +19,16 @@ namespace OnlineShopWebApp.Controllers
             var favorites = favoritesRepository.TryGetByUserId(Constants.UserId);
             return View(favorites);
         }
-        public IActionResult Add(int productId)
+        public IActionResult Add(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            favoritesRepository.Add(product, Constants.UserId);
+            //favoritesRepository.Add(product, Constants.UserId);
             return RedirectToAction("Index");
         }
-        public IActionResult Remove(int productId)
+        public IActionResult Remove(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            favoritesRepository.Remove(product, Constants.UserId);
+            //favoritesRepository.Remove(product, Constants.UserId);
             return RedirectToAction("Index");
         }
         public IActionResult Clear()

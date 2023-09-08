@@ -6,7 +6,7 @@ namespace OnlineShopWebApp
     {
         private List<Cart> carts = new List<Cart>();
 
-        public void Add(Product product, string userId)
+        public void Add(ProductViewModel product, string userId)
         {
             var exisitingCart = TryGetByUserId(userId);
             if (exisitingCart == null) 
@@ -52,7 +52,7 @@ namespace OnlineShopWebApp
             carts.Remove(exisitingCart);
         }
 
-        public void DecreaseAmount(Product product, string userId)
+        public void DecreaseAmount(ProductViewModel product, string userId)
         {
             var exisitingCart = TryGetByUserId(userId);
             if(exisitingCart != null)
@@ -73,7 +73,7 @@ namespace OnlineShopWebApp
 
         }
 
-        public void Remove(Product product, string userId)
+        public void Remove(ProductViewModel product, string userId)
         {
             var exisitingCart = TryGetByUserId(userId);
             if (exisitingCart != null)

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
+using OnlineShopWebApp.Helpers;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
@@ -15,45 +18,50 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            var products = productRepository.GetAll();
-            return View(products);
+            var productsDb = productRepository.GetAll();
+            var productsViewModels = productsDb.ToProductsViewModels();
+            return View(productsViewModels);
         }
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             var product = productRepository.TryGetById(id);
             productRepository.Delete(product);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(Guid id)
         {
-            var product = productRepository.TryGetById(id);
-            if (product != null)
-                return View(product);
+            var productDb = productRepository.TryGetById(id);
+            if (productDb != null)
+            {
+                var productVM = productDb.ToProductViewModel();
+                return View(productVM);
+            }
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public IActionResult Save(Product product)
+        public IActionResult Update(ProductViewModel productVM)
         {
             if (ModelState.IsValid)
             {
-                var editProduct = productRepository.TryGetById(product.Id);
+                var editProductDb = productRepository.TryGetById(productVM.Id);
 
-                if (editProduct != null)
+                if (editProductDb != null)
                 {
-                    editProduct.Name = product.Name;
-                    editProduct.Description = product.Description;
-                    editProduct.Cost = product.Cost;
+                    editProductDb.Name = productVM.Name;
+                    editProductDb.Description = productVM.Description;
+                    editProductDb.Cost = productVM.Cost;
 
-                    if (product.ImagePath != null)
+                    if (productVM.ImagePath != null)
                     {
-                        editProduct.ImagePath = product.ImagePath;
+                        editProductDb.ImagePath = productVM.ImagePath;
                     }
+                    productRepository.Update(editProductDb);
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(nameof(Edit), product);
+            return View(nameof(Edit), productVM);
 
         }
         public IActionResult Add()
@@ -62,14 +70,15 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Product product)
+        public IActionResult Add(ProductViewModel productVM)
         {
             if (ModelState.IsValid)
             {
-                productRepository.Add(product);
+                var productDb = productVM.ToProductDb();
+                productRepository.Add(productDb);
                 return RedirectToAction(nameof(Index));
             }
-            return View(nameof(Add), product);
+            return View(nameof(Add), productVM);
         }
     }
 }
