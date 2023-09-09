@@ -14,7 +14,7 @@ namespace OnlineShopWebApp
 
         public void Add(Product product)
         {
-            product.ImagePath = "/images/image1.jpg";
+            //product.ImagePath = "/images/image1.jpg";
             dataBaseContext.Products.Add(product);
             dataBaseContext.SaveChanges();
         }
