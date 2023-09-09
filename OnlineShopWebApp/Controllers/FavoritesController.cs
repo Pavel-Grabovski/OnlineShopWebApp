@@ -1,41 +1,48 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
+using OnlineShopWebApp.Helpers;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class FavoritesController : Controller
     {
         private readonly IProductsRepository productRepository;
-        private readonly IFavoritesRepository favoritesRepository;
+        private readonly IFavoriteRepository favoriteRepository;
 
-        public FavoritesController(IProductsRepository productRepository, IFavoritesRepository favoritesRepository)
+        public FavoritesController(IProductsRepository productRepository, IFavoriteRepository favoritesRepository)
         {
             this.productRepository = productRepository;
-            this.favoritesRepository = favoritesRepository;
+            this.favoriteRepository = favoritesRepository;
         }
 
         public IActionResult Index()
         {
-            var favorites = favoritesRepository.TryGetByUserId(Constants.UserId);
-            return View(favorites);
+            var products = favoriteRepository.GetAll(Constants.UserId);
+            var productsViewModels = products.ToProductsViewModels();
+            return View(productsViewModels);
         }
         public IActionResult Add(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            //favoritesRepository.Add(product, Constants.UserId);
-            return RedirectToAction("Index");
+            if(product != null)
+            {
+                favoriteRepository.Add(Constants.UserId, product);
+            }
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Remove(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            //favoritesRepository.Remove(product, Constants.UserId);
-            return RedirectToAction("Index");
+            if (product != null)
+            {
+                favoriteRepository.Remove(Constants.UserId, product);
+            }
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Clear()
         {
-
-            favoritesRepository.Clear(Constants.UserId);
-            return RedirectToAction("Index");
+            favoriteRepository.Clear(Constants.UserId);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
