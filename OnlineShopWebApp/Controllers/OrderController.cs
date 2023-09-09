@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
@@ -28,15 +29,15 @@ namespace OnlineShopWebApp.Controllers
         {
             if(ModelState.IsValid)
             {
-                var existingCart = cartsRepository.TryGetByUserId(userInfo.UserId);
-                var order = new Order
-                {
-                    UserInfo = userInfo,
-                    Cart = existingCart,
-                };
+                //var existingCart = cartsRepository.TryGetByUserId(userInfo.UserId);
+                //var order = new Order
+                //{
+                //    UserInfo = userInfo,
+                //    Cart = existingCart,
+                //};
 
-                ordersRepository.Add(order);
-                cartsRepository.Clear(Constants.UserId);
+                //ordersRepository.Add(order);
+                //cartsRepository.Clear(Constants.UserId);
                 return View();
             }
             return View("Index", userInfo);

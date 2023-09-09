@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
 
 namespace OnlineShopWebApp.Views.Shared.Components.Cart
 {
@@ -14,8 +15,11 @@ namespace OnlineShopWebApp.Views.Shared.Components.Cart
         public IViewComponentResult Invoke()
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
-            int productCount = cart?.Amount ?? 0 ;
-
+            int productCount = 0;
+            if (cart != null)
+            {
+                productCount = cart.Items.Sum(x => x.Amount);
+            }
             return View("Cart", productCount);
         }
     }

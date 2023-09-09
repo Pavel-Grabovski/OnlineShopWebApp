@@ -42,38 +42,38 @@ namespace OnlineShopWebApp.Helpers
             };
         }
 
-        //public static CartViewModel ToCartViewModel(this Cart cartDB)
-        //{
-        //    var cartItemsVM = new List<CartItemViewModel>();
+        public static CartViewModel ToCartViewModel(this Cart cartDB)
+        {
+            var cartItemsVM = new List<CartItemViewModel>();
 
-        //    foreach (var cartItem in cartDB.CartItems)
-        //    {
-        //        var cartItemVM = new CartItemViewModel
-        //        {
-        //            Id = cartItem.Id,
-        //            Product = new ProductViewModel
-        //            {
-        //                Id = cartItem.Product.Id,
-        //                Name = cartItem.Product.Name,
-        //                Description = cartItem.Product.Description,
-        //                Cost = cartItem.Product.Cost,
-        //                ImagePath = cartItem.Product.ImagePath
-        //            },
-        //            Amount = cartItem.Amount
-        //        };
-        //        cartItemsVM.Add(cartItemVM);
-        //    }
+            foreach (var cartItem in cartDB.Items)
+            {
+                var cartItemVM = new CartItemViewModel
+                {
+                    Id = cartItem.Id,
+                    Product = new ProductViewModel
+                    {
+                        Id = cartItem.Product.Id,
+                        Name = cartItem.Product.Name,
+                        Description = cartItem.Product.Description,
+                        Cost = cartItem.Product.Cost,
+                        ImagePath = cartItem.Product.ImagePath
+                    },
+                    Amount = cartItem.Amount
+                };
+                cartItemsVM.Add(cartItemVM);
+            }
 
 
-        //    var cartVM = new CartViewModel
-        //    {
-        //        Id = cartDB.Id,
-        //        UserId = cartDB.UserId,
-        //        Items = cartItemsVM
-        //    };
+            var cartVM = new CartViewModel
+            {
+                Id = cartDB.Id,
+                UserId = cartDB.UserId,
+                Items = cartItemsVM
+            };
 
-        //    return cartVM;
-        //}
+            return cartVM;
+        }
 
 
 

@@ -6,7 +6,7 @@ namespace OnlineShopWebApp.Models
     {
         public Guid Id { get; set; }
         public UserDeliveryInfo UserInfo { get; set; }
-        public Cart Cart { get; set; }
+        public CartViewModel Cart { get; set; }
         public DateTime DataTime { get; set; }
         public OrderStatus Status { get; set; }
         public decimal Cost
