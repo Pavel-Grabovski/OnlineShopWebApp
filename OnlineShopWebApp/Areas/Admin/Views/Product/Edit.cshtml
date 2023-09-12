@@ -1,4 +1,4 @@
-﻿@model Product
+﻿@model ProductViewModel
 <form method="post">
     <div class="row">
         <div class="col-6">
@@ -20,7 +20,7 @@
                 <label asp-for="Cost">Стоимость</label>
                 <span class="text-danger" asp-validation-for="Cost"></span>
             </div>
-            <button class="w-100 btn btn-lg btn-success" type="submit" asp-area="Admin" asp-controller="Product" asp-action="Save">
+            <button class="w-100 btn btn-lg btn-success" type="submit" asp-area="Admin" asp-controller="Product" asp-action="Update">
                 Сохранить
             </button>
         </div>

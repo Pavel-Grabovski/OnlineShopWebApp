@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
+using OnlineShop.Db.Models;
+using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
@@ -17,25 +20,33 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult Index()
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
-            return View(cart);
+            if(cart != null && cart.Items.Count > 0)
+            {
+                var cartVM = cart.ToCartViewModel();
+                return View(cartVM);
+            }
+            return View();
         }
-        public IActionResult Add(int productId)
+        public IActionResult Add(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            cartsRepository.Add(product, Constants.UserId);
-            return RedirectToAction("Index");
+            cartsRepository.Add(Constants.UserId, product);
+            return RedirectToAction(nameof(Index));
         }
-        public IActionResult DecreaseAmount(int productId)
+        public IActionResult DecreaseAmount(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            cartsRepository.DecreaseAmount(product, Constants.UserId);
-            return RedirectToAction("Index");
+            if(product != null)
+            {
+                cartsRepository.DecreaseAmount(Constants.UserId, product);
+            }
+            return RedirectToAction(nameof(Index));
         }
-        public IActionResult Remove(int productId)
+        public IActionResult Remove(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            cartsRepository.Remove(product, Constants.UserId);
-            return RedirectToAction("Index");
+            cartsRepository.Remove(Constants.UserId, product);
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Clear()
         {

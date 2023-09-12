@@ -2,10 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 namespace OnlineShopWebApp.Models
 {
-    public class UserDeliveryInfo
+    public class UserDeliveryInfoViewModel
     {
+        public Guid Id { get; set; }
         [ValidateNever]
-        public string UserId { get; set; }
 
         [EmailAddress(ErrorMessage = "Укажите ваш e-mail.")]
         public string Email { get; set; }

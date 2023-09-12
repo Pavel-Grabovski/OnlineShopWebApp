@@ -1,6 +1,6 @@
-﻿@model Favorites
+﻿@model ICollection<ProductViewModel>
 
-@if (Model == null || Model.Items.Count == 0)
+@if (Model == null || Model.Count == 0)
 {
     <h3>В списке пока нет ни одного избранного товара</h3>
 }
@@ -19,13 +19,13 @@ else
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var item in Model.Items)
+                    @foreach(var item in Model)
                     {
                         <tr>
-                            <td>@item.Product.Name</td>
-                            <td>@item.Product.Cost</td>
+                            <td>@item.Name</td>
+                            <td>@item.Cost</td>
                             <td>
-                                <a class="btn btn-danger" href="/favorites/remove?productId=@item.Product.Id" role="button">-</a>
+                                <a class="btn btn-danger" href="/favorites/remove?productId=@item.Id" role="button">-</a>
                             </td>
                         </tr>
                     }

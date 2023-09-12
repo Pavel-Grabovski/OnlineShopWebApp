@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
+using OnlineShop.Db.Models;
+using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
@@ -17,29 +20,31 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult Index()
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
-
-            ViewBag.Cart = cart;
+            if (cart != null)
+            {
+                ViewBag.Cart = cart.ToCartViewModel();
+            }
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult Buy(UserDeliveryInfo userInfo)
+        public IActionResult Buy(UserDeliveryInfoViewModel userInfo)
         {
             if(ModelState.IsValid)
             {
-                var existingCart = cartsRepository.TryGetByUserId(userInfo.UserId);
+                var cartDb = cartsRepository.TryGetByUserId(Constants.UserId);
                 var order = new Order
                 {
-                    UserInfo = userInfo,
-                    Cart = existingCart,
+                    UserInfo = userInfo.ToUserDeliveryInfo(),
+                    Items = cartDb.Items
                 };
 
                 ordersRepository.Add(order);
-                cartsRepository.Clear(Constants.UserId);
+                cartsRepository.Remove(Constants.UserId);
                 return View();
             }
-            return View("Index", userInfo);
+            return View(nameof(Index), userInfo);
         }
     }
 }
