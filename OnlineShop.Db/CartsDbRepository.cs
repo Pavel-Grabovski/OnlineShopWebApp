@@ -109,6 +109,16 @@ namespace OnlineShop.Db
             }
         }
 
+        public void Remove(string userId)
+        {
+            var cart = TryGetByUserId(userId);
+            if (cart != null)
+            {
+                dataBaseContext.Carts.Remove(cart);
+                dataBaseContext.SaveChanges();
+            }
+        }
+
         public Cart TryGetByUserId(string userId)
         {
             return dataBaseContext.Carts

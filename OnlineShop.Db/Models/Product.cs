@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace OnlineShop.Db.Models
+﻿namespace OnlineShop.Db.Models
 {
     public class Product
     {
