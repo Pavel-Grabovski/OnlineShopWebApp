@@ -1,6 +1,7 @@
 ﻿using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 using System.Linq;
+using System.Net;
 
 namespace OnlineShopWebApp.Helpers
 {
@@ -77,54 +78,55 @@ namespace OnlineShopWebApp.Helpers
 
 
 
-        //public static OrderViewModel ToOrderViewModel(this Order orderDb)
-        //{
-        //    return new OrderViewModel
-        //    {
-        //        Id = orderDb.Id,
-        //        CreateDateTime = orderDb.CreateDateTime,
-        //        UserDeliveryInfo = orderDb.UserDeliveryInfo.ToUserDeliveryInfoViewModel(),
-        //        Items = orderDb.Items.Select(x => x.ToCartItemViewModel()).ToList(),
-        //        Status = (OrderStatusViewModel)(int)orderDb.Status
-        //    };
-        //}
+        public static OrderViewModel ToOrderViewModel(this Order orderDb)
+        {
+            return new OrderViewModel
+            {
+                Id = orderDb.Id,
+                UserInfo = orderDb.UserInfo.ToUserDeliveryInfoViewModel(),
+                Items = orderDb.Items.Select(x => x.ToCartItemViewModel()).ToList(),
+                CreateDataTime = orderDb.CreateDataTime,
+                Status = (OrderStatusViewModel)(int)orderDb.Status
 
-        //public static UserDeliveryInfoViewModel ToUserDeliveryInfoViewModel(this UserDeliveryInfo userDb)
-        //{
-        //    return new UserDeliveryInfoViewModel
-        //    {
-        //        Address = userDb.Address,
-        //        City = userDb.City,
-        //        Comments = userDb.Comments,
-        //        FirstName = userDb.FirstName,
-        //        LastName = userDb.LastName,
-        //        Phone = userDb.Phone,
-        //        ZipCode = userDb.ZipCode
-        //    };
-        //}
+            };
+        }
 
-        //public static UserDeliveryInfo ToUserDeliveryInfo(this UserDeliveryInfoViewModel user)
-        //{
-        //    return new UserDeliveryInfo
-        //    {
-        //        Address = user.Address,
-        //        City = user.City,
-        //        Comments = user.Comments,
-        //        FirstName = user.FirstName,
-        //        LastName = user.LastName,
-        //        Phone = user.Phone,
-        //        ZipCode = user.ZipCode
-        //    };
-        //}
+        public static UserDeliveryInfoViewModel ToUserDeliveryInfoViewModel(this UserDeliveryInfo userDb)
+        {
+            return new UserDeliveryInfoViewModel
+            {
+                Id = userDb.Id,
+                Email = userDb.Email,
+                Name = userDb.Name,
+                Surname = userDb.Surname,
+                Patronymic = userDb.Patronymic,
+                Phone = userDb.Phone,
+                Address = userDb.Address,
+            };
+        }
 
-        //public static CartItemViewModel ToCartItemViewModel(this CartItem cartItemDb)
-        //{
-        //    return new CartItemViewModel
-        //    {
-        //        Id = cartItemDb.Id,
-        //        Amount = cartItemDb.Amount,
-        //        Product = cartItemDb.Product.ToProductViewModel()
-        //    };
-        //}
+        public static UserDeliveryInfo ToUserDeliveryInfo(this UserDeliveryInfoViewModel userVM)
+        {
+            return new UserDeliveryInfo
+            {
+                Id = userVM.Id,
+                Email = userVM.Email,
+                Name = userVM.Name,
+                Surname = userVM.Surname,
+                Patronymic = userVM.Patronymic,
+                Phone = userVM.Phone,
+                Address = userVM.Address,
+            };
+        }
+
+        public static CartItemViewModel ToCartItemViewModel(this CartItem cartItemDb)
+        {
+            return new CartItemViewModel
+            {
+                Id = cartItemDb.Id,
+                Amount = cartItemDb.Amount,
+                Product = cartItemDb.Product.ToProductViewModel()
+            };
+        }
     }
 }
