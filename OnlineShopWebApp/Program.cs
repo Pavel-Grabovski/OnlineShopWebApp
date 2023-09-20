@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp;
 using Serilog;
 
@@ -12,6 +14,26 @@ string connection = builder.Configuration.GetConnectionString("online_shop");
 
 // добавляем контекст DataBaseContext в качестве сервиса в приложение
 builder.Services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(connection));
+
+// добавляем контекст IdentityContext в качестве сервиса в приложение
+builder.Services.AddDbContext<IdentityContext>(options =>
+            options.UseSqlServer(connection));
+
+builder.Services.AddIdentity<User, IdentityRole>() // Привязываем пользователя к роли
+    .AddEntityFrameworkStores<IdentityContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.Cookie = new CookieBuilder
+    {
+        IsEssential = true
+    };
+});
+
+
 
 
 // Add services to the container.
@@ -41,6 +63,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -49,5 +72,15 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{Id?}");
+
+using(var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var userManager = services.GetRequiredService<UserManager<User>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+    IdentityInitializer.Initialize(userManager, roleManager);
+}
 
 app.Run();

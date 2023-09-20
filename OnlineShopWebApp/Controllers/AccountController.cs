@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using OnlineShop.Db;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 using Serilog;
 
@@ -8,33 +11,42 @@ namespace OnlineShopWebApp.Controllers
     public class AccountController : Controller
     {
         private readonly IUsersManager usersManager;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+
         private readonly ILogger<AccountController> logger;
 
-        public AccountController(IUsersManager usersManager, ILogger<AccountController> logger)
+        public AccountController(IUsersManager usersManager, UserManager<User> userManager, SignInManager<User> singInManager, ILogger<AccountController> logger)
         {
             this.usersManager = usersManager;
-            this.logger = logger; 
+            this.userManager = userManager;
+            this.signInManager = singInManager;
+            this.logger = logger;
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
-            return View();
+            return View(new Login() { ReturnUrl = returnUrl});
         }
 
         [HttpPost]
         public IActionResult Login(Login login)
         {
-            if(!ModelState.IsValid)
-                return RedirectToAction(nameof(Login));
-
-            var userAccount = usersManager.TryGetByUserName(login.Email);
-            if (userAccount == null || userAccount.Password != login.Password)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Неверный логин или пароль!");
-                return View(login);
+                var result = signInManager.PasswordSignInAsync(login.Email, login.Password, login.RememberMe, false).Result;
+                if (result.Succeeded)
+                {
+                    if (login.ReturnUrl != null)
+                        return Redirect(login.ReturnUrl);
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Логин и/или не совпадают!");
+                }
             }
-
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return View(login);
         }
 
         public IActionResult Register()
@@ -51,14 +63,27 @@ namespace OnlineShopWebApp.Controllers
             }
             if(ModelState.IsValid && register.Password == register.ConfirmPassword)
             {
-                usersManager.Add(new UserAccount
+                var user = new User { Email = register.Email };
+                var result = userManager.CreateAsync(user, register.Password).Result;
+                if (result.Succeeded)
                 {
-                    Email = register.Email,
-                    Password = register.Password
-                });
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                    signInManager.SignInAsync(user, false).Wait();
+                    userManager.AddToRoleAsync(user, Constants.UserRoleName).Wait();
+                    return RedirectToAction(nameof(Login));
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                        ModelState.AddModelError("", $"Ошибка регистрации в поле {error.Description}");
+                }
             }
             return View(register);
+        }
+
+        public IActionResult Logout()
+        {
+            signInManager.SignOutAsync().Wait();
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }
