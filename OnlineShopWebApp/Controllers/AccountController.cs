@@ -49,9 +49,9 @@ namespace OnlineShopWebApp.Controllers
             return View(login);
         }
 
-        public IActionResult Register()
+        public IActionResult Register(string returnUrl)
         {
-            return View();
+            return View(new Register() { ReturnUrl = returnUrl});
         }
 
         [HttpPost]
@@ -63,7 +63,7 @@ namespace OnlineShopWebApp.Controllers
             }
             if(ModelState.IsValid && register.Password == register.ConfirmPassword)
             {
-                var user = new User { Email = register.Email };
+                var user = new User { UserName = register.Email, Email = register.Email };
                 var result = userManager.CreateAsync(user, register.Password).Result;
                 if (result.Succeeded)
                 {
@@ -74,7 +74,20 @@ namespace OnlineShopWebApp.Controllers
                 else
                 {
                     foreach (var error in result.Errors)
-                        ModelState.AddModelError("", $"Ошибка регистрации в поле {error.Description}");
+                    {
+                        if(error.Code == "PasswordRequiresNonAlphanumeric") 
+                            ModelState.AddModelError("", "Пароль должнен содержать хотя бы один небуквенно - цифровой символ.");
+                        else if (error.Code == "PasswordTooShort")
+                            ModelState.AddModelError("", "Минимальная длина пароля - 6 символов!");
+                        else if (error.Code == "PasswordRequiresDigit")
+                            ModelState.AddModelError("", "Пароль должен содержать хотя бы одну цифру (от '0' до '9').");
+                        else if(error.Code == "PasswordRequiresLower")
+                            ModelState.AddModelError("", "Пароль должен содержать хотя бы одну строчную букву ('a'-'z').");
+                        else if(error.Code == "PasswordRequiresUpper")
+                            ModelState.AddModelError("", "Пароль должен содержать хотя бы одну заглавную букву ('A'-'Z').");
+                        else if (error.Code == "DuplicateUserName")
+                            ModelState.AddModelError("", $"Имя пользователя «{register.Email}» уже занято.");
+                    }
                 }
             }
             return View(register);

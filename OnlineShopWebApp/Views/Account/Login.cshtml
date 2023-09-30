@@ -27,7 +27,7 @@
             <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Login">
                 Войти
             </button>
-            <a class="nav-link" href="/account/register" role="button">Регистрация нового пользователя</a>
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register" asp-route-ReturnUrl="@Model.ReturnUrl" role="button">Регистрация нового пользователя</a>
 
         </div>
         <div class="col"></div>
