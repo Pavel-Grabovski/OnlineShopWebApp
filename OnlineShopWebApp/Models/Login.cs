@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShopWebApp.Models
 {
@@ -12,5 +11,6 @@ namespace OnlineShopWebApp.Models
         [Required(ErrorMessage = "Не указан пароль")]
         public string Password { get; set; }
         public bool RememberMe{ get; set; }
+        public string? ReturnUrl { get; set; }
     }
 }

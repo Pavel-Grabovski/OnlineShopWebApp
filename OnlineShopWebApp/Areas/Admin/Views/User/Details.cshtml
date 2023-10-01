@@ -1,4 +1,4 @@
-﻿@model UserAccount
+﻿@model UserViewModel
 
 <form method="post">
     <div class="row">
@@ -40,7 +40,7 @@
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Edit">Редактирование данных</a>
             </li>
             <li>
-                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Role">Права доступа</a>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="EditRights" asp-route-email="@Model.Email">Редактировать права</a>
             </li>
             <li>
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Delete" >Удалить</a>
@@ -144,11 +144,11 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="Role" tabindex="-1" aria-labelledby="RoleLabel" aria-hidden="true">
+<div class="modal fade" id="EditRights" tabindex="-1" aria-labelledby="RoleLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="RoleLabel">Вы действительно хотите удалить пользователя @Model.Email?</h5>
+                <h5 class="modal-title" id="RoleLabel">Изменение прав пользователя @Model.Email</h5>
             </div>
             <div class="modal-body">
                 <
@@ -173,16 +173,13 @@
                         <td>Отчество</td>
                         <td>@Model.Patronymic</td>
                     </tr>
-@*                    <tr>
+                    <tr>
                         <td>Роль</td>
                         <td>
 
-                            <select asp-for="@Model.Role"
-                                    asp-items="@Html.GetEnumSelectList<ViewBag.Roles>()"
-                            class="form-control">
-                            </select>
+                            
                         </td>
-                    </tr>*@
+                    </tr>
                 </table>
             </div>
             <div class="modal-footer">

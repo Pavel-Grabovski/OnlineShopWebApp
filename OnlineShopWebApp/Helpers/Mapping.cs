@@ -1,4 +1,5 @@
 ﻿using OnlineShop.Db.Models;
+using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Models;
 using System.Linq;
 using System.Net;
@@ -126,6 +127,19 @@ namespace OnlineShopWebApp.Helpers
                 Id = cartItemDb.Id,
                 Amount = cartItemDb.Amount,
                 Product = cartItemDb.Product.ToProductViewModel()
+            };
+        }
+
+        public static UserViewModel ToUserViewModel(this User user)
+        {
+            return new UserViewModel
+            {
+                Email = user.Email,
+                Phone = user.PhoneNumber,
+
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic
             };
         }
     }
