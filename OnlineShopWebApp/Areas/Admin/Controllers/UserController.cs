@@ -13,10 +13,12 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<User> usersManager;
+        private readonly RoleManager<IdentityRole> rolesManager;
 
-        public UserController(UserManager<User> usersManager)
+        public UserController(UserManager<User> usersManager, RoleManager<IdentityRole> rolesManager)
         {
             this.usersManager = usersManager;
+            this.rolesManager = rolesManager;
         }
 
         public IActionResult Index()
@@ -38,12 +40,6 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             return View(user.ToUserViewModel());
         }
 
-        public IActionResult Save(UserViewModel newUserAccount)
-        {
-            //var userAccounts = usersManager.TryGetByUserName(newUserAccount.Email);
-            //usersManager.Delete(userAccounts);
-            return RedirectToAction(nameof(Index));
-        }
         public IActionResult ChangePassword(string email)
         {
             var changePassword = new ChangePasswordViewModel()
@@ -51,6 +47,35 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
                 Email = email
             };
             return View(changePassword);
+        }
+
+        public IActionResult EditRights(string email)
+        {
+            var user = usersManager.FindByEmailAsync(email).Result;
+            var userRoles = usersManager.GetRolesAsync(user).Result;
+            var roles = rolesManager.Roles.ToList();
+            var model = new EditRightsViewModel
+            {
+                Email = user.Email,
+                UserRoles = userRoles.Select(x => new RoleViewModel { Name = x }).ToList(),
+                AllRoles = roles.Select(x => new RoleViewModel { Name = x.Name }).ToList()
+            };
+            return View(model);
+            
+        }
+
+        [HttpPost]
+        public IActionResult EditRights(string email, Dictionary<string, bool> userRolesViewModel)
+        {
+            var userSelectedRoles = userRolesViewModel.Select(x => x.Key);
+
+            var user = usersManager.FindByEmailAsync(email).Result;
+            var userRoles = usersManager.GetRolesAsync(user).Result;
+
+            usersManager.RemoveFromRolesAsync(user, userRoles).Wait();
+            usersManager.AddToRolesAsync(user, userSelectedRoles).Wait();
+
+            return Redirect($"/Admin/User/Details?email={email}");
         }
 
         [HttpPost]
@@ -83,5 +108,6 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
 
             return View(nameof(Details), userViewModel);
         }
+
     }
 }
