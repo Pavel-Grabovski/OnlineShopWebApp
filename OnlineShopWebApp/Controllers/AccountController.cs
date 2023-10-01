@@ -10,15 +10,13 @@ namespace OnlineShopWebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUsersManager usersManager;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
 
         private readonly ILogger<AccountController> logger;
 
-        public AccountController(IUsersManager usersManager, UserManager<User> userManager, SignInManager<User> singInManager, ILogger<AccountController> logger)
+        public AccountController( UserManager<User> userManager, SignInManager<User> singInManager, ILogger<AccountController> logger)
         {
-            this.usersManager = usersManager;
             this.userManager = userManager;
             this.signInManager = singInManager;
             this.logger = logger;
@@ -43,7 +41,7 @@ namespace OnlineShopWebApp.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Логин и/или не совпадают!");
+                    ModelState.AddModelError("", "Логин и пароль не совпадают!");
                 }
             }
             return View(login);

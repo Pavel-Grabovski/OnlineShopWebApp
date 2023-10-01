@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShopWebApp.Areas.Admin.Models
 {
-    public class ChangePassword
+    public class ChangePasswordViewModel
     {
         [Required(ErrorMessage = "Не указан E-mail!")]
         [EmailAddress(ErrorMessage = "Неправильно введен E-mail!")]

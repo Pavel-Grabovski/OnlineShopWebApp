@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Admin.Models;
-using OnlineShopWebApp.Models;
+using OnlineShopWebApp.Helpers;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
@@ -10,46 +12,41 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     [Authorize(Roles = Constants.AdminRoleName)]
     public class UserController : Controller
     {
-        private readonly IUsersManager usersManager;
-        private readonly IRolesRepository rolesRepository;
+        private readonly UserManager<User> usersManager;
 
-        public UserController(IUsersManager usersManager, IRolesRepository rolesRepository)
+        public UserController(UserManager<User> usersManager)
         {
             this.usersManager = usersManager;
-            this.rolesRepository = rolesRepository;
         }
 
         public IActionResult Index()
         {
-            var userAccounts = usersManager.GetAll();
-            return View(userAccounts);
+            var users = usersManager.Users.ToList(); 
+            return View(users.Select(x => x.ToUserViewModel()).ToList());
         }
         public IActionResult Delete(string email)
         {
-            var userAccounts = usersManager.TryGetByUserName(email);
-            usersManager.Delete(userAccounts);
+            var user = usersManager.FindByEmailAsync(email).Result;
+            usersManager.DeleteAsync(user).Wait();
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Details(string email)
         {
-            var userAccounts = usersManager.TryGetByUserName(email);
+            var user = usersManager.FindByEmailAsync(email).Result;
 
-            //var roles = rolesRepository.GetAll();
-            //ViewBag.Roles = roles;
-
-            return View(userAccounts);
+            return View(user.ToUserViewModel());
         }
 
-        public IActionResult Save(UserAccount newUserAccount)
+        public IActionResult Save(UserViewModel newUserAccount)
         {
-            var userAccounts = usersManager.TryGetByUserName(newUserAccount.Email);
-            usersManager.Delete(userAccounts);
+            //var userAccounts = usersManager.TryGetByUserName(newUserAccount.Email);
+            //usersManager.Delete(userAccounts);
             return RedirectToAction(nameof(Index));
         }
         public IActionResult ChangePassword(string email)
         {
-            var changePassword = new ChangePassword()
+            var changePassword = new ChangePasswordViewModel()
             {
                 Email = email
             };
@@ -57,7 +54,7 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(ChangePassword changePassword)
+        public IActionResult ChangePassword(ChangePasswordViewModel changePassword)
         {
             if (changePassword.Email == changePassword.Password)
             {
@@ -65,24 +62,26 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             }
             if (ModelState.IsValid)
             {
-                usersManager.ChangePassword(changePassword.Email, changePassword.Password);
-                var user = usersManager.TryGetByUserName(changePassword.Email);
-                return View(nameof(Details), user);
+                var user = usersManager.FindByEmailAsync(changePassword.Email).Result;
+                var newHashPassword = usersManager.PasswordHasher.HashPassword(user, changePassword.Password);
+                user.PasswordHash = newHashPassword;
+                usersManager.UpdateAsync(user).Wait();
+                return RedirectToAction(nameof(Index));
             }
             return View(changePassword);
         }
 
         [HttpPost]
-        public IActionResult Edit(UserAccount user)
+        public IActionResult Edit(UserViewModel userViewModel)
         {
-            var editUser = usersManager.TryGetByUserName(user.Email);
+            var user = usersManager.FindByEmailAsync(userViewModel.Email).Result;
+            user.PhoneNumber = userViewModel.Phone;
+            user.Name = userViewModel.Name;
+            user.Surname = userViewModel.Surname;
+            user.Patronymic = userViewModel.Patronymic;
+            usersManager.UpdateAsync(user).Wait();
 
-            editUser.Surname = user.Surname;
-            editUser.Name = user.Name;
-            editUser.Patronymic = user.Patronymic;
-            editUser.Phone = user.Phone;
-
-            return View(nameof(Details), editUser);
+            return View(nameof(Details), userViewModel);
         }
     }
 }
