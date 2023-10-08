@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShopWebApp;
+using OnlineShopWebApp.Helpers;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +42,7 @@ builder.Services.AddTransient<IFavoriteRepository, FavoritesDbRepository>();
 builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
 builder.Services.AddTransient<ICartsRepository, CartsDbRepository>();
 builder.Services.AddTransient<IOrdersRepository, OrdersDbRepository>();
+builder.Services.AddSingleton<ImagesProvider>();
 
 builder.Services.AddControllersWithViews();
 
