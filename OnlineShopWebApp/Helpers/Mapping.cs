@@ -16,7 +16,7 @@ namespace OnlineShopWebApp.Helpers
                 Name = product.Name,
                 Cost = product.Cost,
                 Description = product.Description,
-                ImagesPaths = product.Images.ToPaths().Where(str => Directory.Exists(str)).ToList(),
+                ImagesPaths = product.Images.ToPaths().ToList(),
             };
         }
         public static ProductViewModel ToProductViewModel(this Product product)
@@ -27,7 +27,7 @@ namespace OnlineShopWebApp.Helpers
                 Name = product.Name,
                 Cost = product.Cost,
                 Description = product.Description,
-                ImagesPaths = product.Images.Where(img => Directory.Exists(img.Url)).Select(x => x.Url).ToArray(),
+                ImagesPaths = product.Images.Select(x => x.Url).ToArray(),
             };
         }
 
