@@ -96,5 +96,21 @@ namespace OnlineShopWebApp.Controllers
             signInManager.SignOutAsync().Wait();
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
+
+        public IActionResult Profile()
+        {
+            var user = userManager.FindByEmailAsync(User.Identity.Name).Result;
+            return View();
+        }
+        public IActionResult Orders()
+        {
+            var user = userManager.FindByEmailAsync(User.Identity.Name).Result;
+            return View();
+        }
+        public IActionResult Settings()
+        {
+            var user = userManager.FindByEmailAsync(User.Identity.Name).Result;
+            return View();
+        }
     }
 }

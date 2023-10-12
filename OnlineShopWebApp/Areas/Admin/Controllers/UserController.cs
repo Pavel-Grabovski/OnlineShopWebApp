@@ -14,11 +14,12 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     {
         private readonly UserManager<User> usersManager;
         private readonly RoleManager<IdentityRole> rolesManager;
-
-        public UserController(UserManager<User> usersManager, RoleManager<IdentityRole> rolesManager)
+        private readonly ImagesProvider imagesProvider;
+        public UserController(UserManager<User> usersManager, RoleManager<IdentityRole> rolesManager, ImagesProvider imagesProvider)
         {
             this.usersManager = usersManager;
             this.rolesManager = rolesManager;
+            this.imagesProvider = imagesProvider;
         }
 
         public IActionResult Index()
@@ -96,17 +97,37 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             return View(changePassword);
         }
 
-        [HttpPost]
-        public IActionResult Edit(UserViewModel userViewModel)
+        public IActionResult Edit(string email)
         {
-            var user = usersManager.FindByEmailAsync(userViewModel.Email).Result;
-            user.PhoneNumber = userViewModel.Phone;
-            user.Name = userViewModel.Name;
-            user.Surname = userViewModel.Surname;
-            user.Patronymic = userViewModel.Patronymic;
+            var user = usersManager.FindByEmailAsync(email).Result;
+            if(user != null)
+            {
+                var editUser = user.ToEditUserViewModel();
+                return View(editUser);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+        [HttpPost]
+        public IActionResult Edit(EditUserViewModel editUserViewModel)
+        {
+            var user = usersManager.FindByEmailAsync(editUserViewModel.Email).Result;
+            user.PhoneNumber = editUserViewModel.Phone;
+            user.Name = editUserViewModel.Name;
+            user.Surname = editUserViewModel.Surname;
+            user.Patronymic = editUserViewModel.Patronymic;
+
+            if(editUserViewModel.UploadFile != null)
+            {
+                var imagesPath = imagesProvider.SafeFiles(editUserViewModel.Email.Replace('@', '_'), editUserViewModel.UploadFile, ImageFolders.Profiles);
+                user.ImagePath = imagesPath;
+            }
+
             usersManager.UpdateAsync(user).Wait();
 
-            return View(nameof(Details), userViewModel);
+            return View(nameof(Details), editUserViewModel.ToUserViewModel());
         }
 
     }

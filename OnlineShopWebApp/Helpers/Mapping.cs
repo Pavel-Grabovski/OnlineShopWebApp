@@ -173,7 +173,38 @@ namespace OnlineShopWebApp.Helpers
 
                 Name = user.Name,
                 Surname = user.Surname,
-                Patronymic = user.Patronymic
+                Patronymic = user.Patronymic,
+
+                ImagePath = user.ImagePath
+            };
+        }
+        public static EditUserViewModel ToEditUserViewModel(this User user)
+        {
+            return new EditUserViewModel
+            {
+                Email = user.Email,
+                Phone = user.PhoneNumber,
+
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
+
+                ImagePath = user.ImagePath
+            };
+        }
+
+        public static UserViewModel ToUserViewModel(this EditUserViewModel user)
+        {
+            return new UserViewModel
+            {
+                Email = user.Email,
+                Phone = user.Phone,
+
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
+                
+                ImagePath = user.ImagePath
             };
         }
     }
