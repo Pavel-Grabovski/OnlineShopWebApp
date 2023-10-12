@@ -1,26 +1,43 @@
-﻿@model ProductViewModel
-<form method="post">
+﻿@model EditProductViewModel
+<form method="post" enctype="multipart/form-data">
     <div class="row">
+
+        <input name="Id" value=@Model.Id hidden />
+
         <div class="col-6">
-            <img class="card-img-top" src=@Model.ImagePath alt="Изображение товара" />
+            <label>Изображения</label>
+            <br />
+            @foreach (var imagePath in Model.ImagesPaths)
+            {
+                <div style="padding:4px">
+                    <img class="card-img-top" src=@imagePath />
+                </div>
+            }
         </div>
+
         <div class="col-6">
-            <input name="Id" value=@Model.Id hidden/>
             <div class="form-floating">
                 <input class="form-control" type="text" name="Name" placeholder="Наименование" value="@Model.Name" asp-for="Name" />
-                <label asp-for="Name" >Наименование товара</label>
+                <label asp-for="Name">Наименование товара</label>
                 <span class="text-danger" asp-validation-for="Name"></span>
-            </div>
+            </div><br />
+
             <div class="form-floating">
                 <textarea class="form-control" name="Description" placeholder="Описание" style="height: 200px">@Model.Description</textarea>
                 <label for="floatingTextarea2">Описание</label>
-            </div>
+            </div><br />
             <div class="form-floating">
-                <input type="number" class="form-control" name="Cost" placeholder="Цена" asp-for="Cost" />
+                <input class="form-control" type="number" name="Cost" placeholder="Цена" value=@Model.Cost asp-for="Cost" />
                 <label asp-for="Cost">Стоимость</label>
                 <span class="text-danger" asp-validation-for="Cost"></span>
-            </div>
-            <button class="w-100 btn btn-lg btn-success" type="submit" asp-area="Admin" asp-controller="Product" asp-action="Update">
+            </div><br />
+
+            <div class="form-group mb-3">
+                <label class="input-group-text">Загрузить новые изображения</label>
+                <input type="file" name="UploadedFiles" multiple accept="image/*" class="form-control" />
+            </div><br />
+
+            <button class="w-100 btn btn-lg btn-success" type="submit" asp-area="Admin" asp-controller="Product" asp-action="Edit">
                 Сохранить
             </button>
         </div>

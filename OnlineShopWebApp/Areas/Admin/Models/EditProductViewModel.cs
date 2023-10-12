@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace OnlineShopWebApp.Models
+namespace OnlineShopWebApp.Areas.Admin.Models
 {
-    public class ProductViewModel
+    public class EditProductViewModel
     {
         public Guid Id { get; set; }
 
@@ -12,7 +12,7 @@ namespace OnlineShopWebApp.Models
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Не указано стоимость.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Некоректная стоимость")]
+        [Range(0, (double)decimal.MaxValue , ErrorMessage = "Некоректная стоимость")]
         [DataType(DataType.Currency, ErrorMessage = "Введите число")]
         public decimal Cost { get; set; }
 
@@ -20,7 +20,9 @@ namespace OnlineShopWebApp.Models
         public string Description { get; set; }
 
         [ValidateNever]
-        public string[] ImagesPaths { get; set; }
-        public string ImagePath => ImagesPaths.Length == 0 ? "/images/NotImage.jpg" : ImagesPaths[0];
+        public List<string> ImagesPaths { get; set; }
+
+        [ValidateNever]
+        public IFormFile[] UploadedFiles { get; set; }
     }
 }

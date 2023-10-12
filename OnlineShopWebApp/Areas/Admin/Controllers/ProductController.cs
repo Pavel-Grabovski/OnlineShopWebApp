@@ -4,6 +4,7 @@ using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 using OnlineShopWebApp.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using OnlineShopWebApp.Areas.Admin.Models;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
@@ -12,10 +13,12 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IProductsRepository productRepository;
+        private readonly ImagesProvider imagesProvider;
 
-        public ProductController(IProductsRepository productRepository)
+        public ProductController(IProductsRepository productRepository, ImagesProvider imagesProvider = null)
         {
             this.productRepository = productRepository;
+            this.imagesProvider = imagesProvider;
         }
 
         public IActionResult Index()
@@ -33,37 +36,35 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
 
         public IActionResult Edit(Guid id)
         {
-            var productDb = productRepository.TryGetById(id);
-            if (productDb != null)
+            var product = productRepository.TryGetById(id);
+            if (product != null)
             {
-                var productVM = productDb.ToProductViewModel();
-                return View(productVM);
+                var editProductVM = product.ToEditProductViewModel();
+                return View(editProductVM);
             }
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public IActionResult Update(ProductViewModel productVM)
+        public IActionResult Edit(EditProductViewModel editProductVM)
         {
             if (ModelState.IsValid)
             {
-                var editProductDb = productRepository.TryGetById(productVM.Id);
-
-                if (editProductDb != null)
+                if (editProductVM.UploadedFiles != null && editProductVM.UploadedFiles.Length > 0)
                 {
-                    editProductDb.Name = productVM.Name;
-                    editProductDb.Description = productVM.Description;
-                    editProductDb.Cost = productVM.Cost;
 
-                    if (productVM.ImagePath != null)
+                    var addedImagesPath = imagesProvider.SafeFiles(editProductVM.Name, editProductVM.UploadedFiles, ImageFolders.Products);
+                    if (editProductVM.ImagesPaths == null)
                     {
-                        editProductDb.ImagePath = productVM.ImagePath;
+                        editProductVM.ImagesPaths = new List<string>();
                     }
-                    productRepository.Update(editProductDb);
+                    editProductVM.ImagesPaths.AddRange(addedImagesPath);
                 }
+
+                productRepository.Update(editProductVM.ToProduct());
                 return RedirectToAction(nameof(Index));
             }
-            return View(nameof(Edit), productVM);
+            return View(nameof(Edit), editProductVM);
 
         }
         public IActionResult Add()
@@ -72,15 +73,16 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(ProductViewModel productVM)
+        public IActionResult Add(AddProductViewModel AddProductVM)
         {
             if (ModelState.IsValid)
             {
-                var productDb = productVM.ToProductDb();
-                productRepository.Add(productDb);
+                var imagesPaths = imagesProvider.SafeFiles(AddProductVM.Name, AddProductVM.UploadedFiles, ImageFolders.Products);
+
+                productRepository.Add(AddProductVM.ToProduct(imagesPaths));
                 return RedirectToAction(nameof(Index));
             }
-            return View(nameof(Add), productVM);
+            return View(nameof(Add), AddProductVM);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using OnlineShop.Db;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db;
 using OnlineShop.Db.Models;
 
 namespace OnlineShopWebApp
@@ -14,7 +15,6 @@ namespace OnlineShopWebApp
 
         public void Add(Product product)
         {
-            //product.ImagePath = "/images/image1.jpg";
             dataBaseContext.Products.Add(product);
             dataBaseContext.SaveChanges();
         }
@@ -27,23 +27,33 @@ namespace OnlineShopWebApp
 
         public ICollection<Product> GetAll()
         {
-            return dataBaseContext.Products.ToList();
+            return dataBaseContext.Products.Include(x => x.Images).ToList();
         }
 
         public Product TryGetById(Guid id)
         {
-            return dataBaseContext.Products.FirstOrDefault(product => product.Id == id);
+            return dataBaseContext.Products.Include(x => x.Images).FirstOrDefault(product => product.Id == id);
         }
 
         public void Update(Product product)
         {
-            var existingProduct = dataBaseContext.Products.FirstOrDefault(x => x.Id == product.Id);
+            var existingProduct = dataBaseContext.Products.Include(x => x.Images).FirstOrDefault(x => x.Id == product.Id);
             if (existingProduct != null)
             {
                 existingProduct.Name = product.Name;
                 existingProduct.Description = product.Description;
                 existingProduct.Cost = product.Cost;
-                existingProduct.ImagePath = "/images/image1.jpg";
+
+                if(product.Images != null &&  product.Images.Count > 0)
+                {
+                    foreach (var image in product.Images)
+                    {
+                        image.ProductId = product.Id;
+                        dataBaseContext.Images.Add(image);
+                    }
+
+                }
+
                 dataBaseContext.SaveChanges();
             }
         }

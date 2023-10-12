@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace OnlineShopWebApp.Models
+namespace OnlineShopWebApp.Areas.Admin.Models
 {
-    public class ProductViewModel
+    public class AddProductViewModel
     {
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "Не указано имя.")]
         [MinLength(2, ErrorMessage = "Короткое имя")]
         public string Name { get; set; }
@@ -20,7 +18,6 @@ namespace OnlineShopWebApp.Models
         public string Description { get; set; }
 
         [ValidateNever]
-        public string[] ImagesPaths { get; set; }
-        public string ImagePath => ImagesPaths.Length == 0 ? "/images/NotImage.jpg" : ImagesPaths[0];
+        public IFormFile[] UploadedFiles { get; set; }
     }
 }

@@ -27,9 +27,15 @@
                         {
                             <div class="dropdown">
                                 <a class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    @User.Identity.Name
+                                   @await Component.InvokeAsync("Avatar")
                                 </a>
                                 <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Profile">Личный кабинет</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Orders">Заказы</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Settings">Настройки</a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Выйти</a></li>
                                 </ul>
                             </div>

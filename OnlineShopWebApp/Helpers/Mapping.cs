@@ -8,16 +8,26 @@ namespace OnlineShopWebApp.Helpers
 {
     public static class Mapping
     {
-
-        public static ProductViewModel ToProductViewModel(this Product productDB)
+        public static EditProductViewModel ToEditProductViewModel(this Product product)
+        {
+            return new EditProductViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Cost = product.Cost,
+                Description = product.Description,
+                ImagesPaths = product.Images.ToPaths().ToList(),
+            };
+        }
+        public static ProductViewModel ToProductViewModel(this Product product)
         {
             return new ProductViewModel
             {
-                Id = productDB.Id,
-                Name = productDB.Name,
-                Cost = productDB.Cost,
-                Description = productDB.Description,
-                ImagePath = productDB.ImagePath,
+                Id = product.Id,
+                Name = product.Name,
+                Cost = product.Cost,
+                Description = product.Description,
+                ImagesPaths = product.Images.Select(x => x.Url).ToArray(),
             };
         }
 
@@ -32,16 +42,40 @@ namespace OnlineShopWebApp.Helpers
             return productsVM;
         }
 
-        public static Product ToProductDb(this ProductViewModel productVM)
+        public static Product ToProduct(this AddProductViewModel addProductViewModel, ICollection<string> imagesPaths)
         {
             return new Product
             {
-                Id = productVM.Id,
-                Name = productVM.Name,
-                Cost = productVM.Cost,
-                Description = productVM.Description,
-                ImagePath = productVM.ImagePath
+                Name = addProductViewModel.Name,
+                Cost = addProductViewModel.Cost,
+                Description = addProductViewModel.Description,
+                Images = ToImages(imagesPaths).ToList()
             };
+        }
+        public static Product ToProduct(this EditProductViewModel editProductViewModel)
+        {
+            return new Product
+            {
+                Id = editProductViewModel.Id,
+                Name = editProductViewModel.Name,
+                Cost = editProductViewModel.Cost,
+                Description = editProductViewModel.Description,
+                Images = editProductViewModel?.ImagesPaths?.ToImages()?.ToList(),
+            };
+        }
+
+        public static ICollection<Image> ToImages(this ICollection<string> paths)
+        {
+            if(paths == null || paths.Count == 0)
+            {
+                return null;
+            }
+            return paths.Select(x => new Image { Url = x }).ToList();
+        }
+
+        public static ICollection<string> ToPaths(this ICollection<Image> images)
+        {
+            return images.Select(x => x.Url).ToList();
         }
 
         public static CartViewModel ToCartViewModel(this Cart cartDB)
@@ -59,7 +93,7 @@ namespace OnlineShopWebApp.Helpers
                         Name = cartItem.Product.Name,
                         Description = cartItem.Product.Description,
                         Cost = cartItem.Product.Cost,
-                        ImagePath = cartItem.Product.ImagePath
+                        //ImagePath = cartItem.Product.ImagePath
                     },
                     Amount = cartItem.Amount
                 };
@@ -139,7 +173,38 @@ namespace OnlineShopWebApp.Helpers
 
                 Name = user.Name,
                 Surname = user.Surname,
-                Patronymic = user.Patronymic
+                Patronymic = user.Patronymic,
+
+                ImagePath = user.ImagePath
+            };
+        }
+        public static EditUserViewModel ToEditUserViewModel(this User user)
+        {
+            return new EditUserViewModel
+            {
+                Email = user.Email,
+                Phone = user.PhoneNumber,
+
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
+
+                ImagePath = user.ImagePath
+            };
+        }
+
+        public static UserViewModel ToUserViewModel(this EditUserViewModel user)
+        {
+            return new UserViewModel
+            {
+                Email = user.Email,
+                Phone = user.Phone,
+
+                Name = user.Name,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
+                
+                ImagePath = user.ImagePath
             };
         }
     }
