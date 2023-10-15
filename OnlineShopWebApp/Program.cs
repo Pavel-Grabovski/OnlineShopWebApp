@@ -43,6 +43,7 @@ builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
 builder.Services.AddTransient<ICartsRepository, CartsDbRepository>();
 builder.Services.AddTransient<IOrdersRepository, OrdersDbRepository>();
 builder.Services.AddSingleton<ImagesProvider>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddControllersWithViews();
 

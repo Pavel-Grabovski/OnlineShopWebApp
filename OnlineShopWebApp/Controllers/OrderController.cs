@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
@@ -12,11 +13,12 @@ namespace OnlineShopWebApp.Controllers
     {
         private readonly ICartsRepository cartsRepository;
         private readonly IOrdersRepository ordersRepository;
-
-        public OrderController(ICartsRepository cartsRepository, IOrdersRepository ordersRepository)
+        private readonly IMapper mapper;
+        public OrderController(ICartsRepository cartsRepository, IOrdersRepository ordersRepository, IMapper mapper)
         {
             this.cartsRepository = cartsRepository;
             this.ordersRepository = ordersRepository;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
@@ -24,7 +26,7 @@ namespace OnlineShopWebApp.Controllers
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
             if (cart != null)
             {
-                ViewBag.Cart = cart.ToCartViewModel();
+                ViewBag.Cart = mapper.Map<CartViewModel>(cart);
             }
 
             return View();
@@ -38,7 +40,7 @@ namespace OnlineShopWebApp.Controllers
                 var cartDb = cartsRepository.TryGetByUserId(Constants.UserId);
                 var order = new Order
                 {
-                    UserInfo = userInfo.ToUserDeliveryInfo(),
+                    UserInfo = mapper.Map<UserDeliveryInfo>(userInfo),
                     Items = cartDb.Items
                 };
 

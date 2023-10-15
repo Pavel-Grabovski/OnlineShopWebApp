@@ -23,7 +23,9 @@ namespace OnlineShop.Db
             return dataBaseContext.Orders
                 .Include(x => x.UserInfo)
                 .Include(x => x.Items)
-                .ThenInclude(x => x.Product).ToList();
+                .ThenInclude(x => x.Product)
+                .ThenInclude(x => x.Images)
+                .ToList();
         }
 
 
@@ -33,6 +35,7 @@ namespace OnlineShop.Db
                 .Include(x => x.UserInfo)
                 .Include(x => x.Items)
                 .ThenInclude(x => x.Product)
+                .ThenInclude(x => x.Images)
                 .FirstOrDefault(x => x.Id == id);
         }
 
