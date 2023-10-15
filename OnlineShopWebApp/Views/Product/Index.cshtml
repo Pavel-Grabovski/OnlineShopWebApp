@@ -1,0 +1,24 @@
+﻿@model ProductViewModel
+
+<div class="row">
+    <div class="col-6">
+        @if (@Model.ImagePath != null )
+        {
+            <img class="card-img-top" src=@Model.ImagePath alt="Изображение товара">
+        }
+        else
+        {
+            <img class="card-img-top" src="/images/NotImage.jpg" alt="Изображение товара">
+        }
+    </div>
+    <div class="col-6">
+        <a style="color:black" href="/product/index/@Model.Id">
+            <h5>@Model.Name</h5>
+        </a>
+        <h5>@Model.Cost руб</h5>
+        <h5>@Model.Description</h5>
+        <a class="btn btn-dark" href="/cart/add?productId=@Model.Id" role="button">Добавить в корзину</a>
+        <a class="btn btn-info" href="/home/index" role="button">Продолжить покупки </a>
+    </div>
+</div>
+

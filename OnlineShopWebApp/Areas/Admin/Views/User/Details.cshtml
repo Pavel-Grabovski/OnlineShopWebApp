@@ -1,0 +1,100 @@
+﻿@model UserViewModel
+
+<form method="post">
+    <div class="row">
+        <div class="col-6">
+            <table class="table">
+                <tr>
+                    <td>Email</td>
+                    <td>@Model.Email</td>
+                </tr>
+                <tr>
+                    <td>Телефон</td>
+                    <td>@Model.Phone</td>
+                </tr>
+                <tr>
+                    <td>Фамилия</td>
+                    <td>@Model.Surname</td>
+                </tr>
+                <tr>
+                    <td>Имя</td>
+                    <td>@Model.Name</td>
+                </tr>
+                <tr>
+                    <td>Отчество</td>
+                    <td>@Model.Patronymic</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br />
+
+    <div class="dropdown">
+        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Действие
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="ChangePassword" asp-route-email="@Model.Email">Смена пароля</a></li>
+            <li>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Edit" asp-route-email="@Model.Email">Редактирование данных</a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="EditRights" asp-route-email="@Model.Email">Редактировать права</a>
+            </li>
+            <li>
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Delete" >Удалить</a>
+            </li>
+            
+            
+        </ul>
+    </div>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="Delete" tabindex="-1" aria-labelledby="DeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DeleteLabel">Вы действительно хотите удалить пользователя @Model.Email?</h5>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <td>Email</td>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <td>Телефон</td>
+                        <td>@Model.Phone</td>
+                    </tr>
+                    <tr>
+                        <td>Фамилия</td>
+                        <td>@Model.Surname</td>
+                    </tr>
+                    <tr>
+                        <td>Имя</td>
+                        <td>@Model.Name</td>
+                    </tr>
+                    <tr>
+                        <td>Отчество</td>
+                        <td>@Model.Patronymic</td>
+                    </tr>
+                    @*<tr>
+                        <td>Роль</td>
+                        <td>
+                            <select asp-for="@Model.Role"
+                                    asp-items="@Html.GetEnumSelectList<RolesInMemoryRepository>()"
+                                    class="form-control">
+                            </select>
+                        </td>
+                    </tr>*@
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Отменить</button>
+                <a asp-area="Admin" asp-controller="User" asp-action="Delete" asp-route-email="@Model.Email" type="button" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
+    </div>
+</div>

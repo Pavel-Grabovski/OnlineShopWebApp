@@ -1,25 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
+using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
-using System.Diagnostics;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index(string name, int age)
+        private readonly IProductsRepository productRepository;
+        private readonly IMapper mapper;
+        public HomeController(IProductsRepository productRepository, IMapper mapper)
         {
-            return View();
+            this.productRepository = productRepository;
+            this.mapper = mapper;
         }
 
-        public IActionResult Privacy()
+        public IActionResult Index()
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var productsDb = productRepository.GetAll();
+            var productsViewModels = mapper.Map<ICollection<ProductViewModel>>(productsDb);
+            return View(productsViewModels);
         }
     }
 }

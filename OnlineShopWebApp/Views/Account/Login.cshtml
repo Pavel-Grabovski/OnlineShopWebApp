@@ -1,0 +1,35 @@
+﻿@model Login
+<form method="post" asp-action="Account" asp-controller="Login">
+    <div class="row text-center">
+        <div class="col"></div>
+        <div class="col">
+
+            <h1 class="h3">Авторизация</h1>
+
+            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+            <div class="form-floating">
+                <input type="email" class="form-control" placeholder="name@example.com" asp-for="Email" />
+                <label asp-for="Email">Email</label>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" type="password" placeholder="password" type="password" asp-for="Password" />
+                <label asp-for="Password">Пароль</label>
+            </div>
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="rememberMe" value="true">  Запомнить меня?
+                </label>
+            </div>
+
+            <div class="text-danger font-weight-bold" asp-validation-summary=ModelOnly></div>
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Login">
+                Войти
+            </button>
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register" asp-route-ReturnUrl="@Model.ReturnUrl" role="button">Регистрация нового пользователя</a>
+
+        </div>
+        <div class="col"></div>
+    </div>
+</form>

@@ -1,0 +1,13 @@
+﻿@model UserViewModel
+@if (Model != null)
+{
+    @if (Model.ImagePath != null)
+    {
+        <img src="@Model.ImagePath" class="rounded-circle" height="35" width="35" />
+    }
+    else
+    {
+        @Model.Email
+    }
+}
+

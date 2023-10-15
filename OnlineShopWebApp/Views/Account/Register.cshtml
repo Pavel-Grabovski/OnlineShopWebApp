@@ -1,0 +1,33 @@
+﻿@model Register
+
+<form method="post" asp-action="Account" asp-controller="Login">
+    <div class="row text-center">
+        <div class="col"></div>
+        <div class="col">
+            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl"/>
+            <h1 class="h3">Регистрация</h1>
+
+            <div class="form-floating">
+                <input type="email" class="form-control" placeholder="name@example.com" asp-for="Email" />
+                <label asp-for="Email">Email</label>
+            </div>
+
+            <div class="form-floating">
+                <input class="form-control" type="password" placeholder="password" type="password" asp-for="Password" />
+                <label asp-for="Password">Пароль</label>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" type="password" placeholder="confirmPassword" type="password" asp-for="ConfirmPassword" />
+                <label asp-for="ConfirmPassword">Подтвердите пароль</label>
+            </div>
+
+            <div class="text-danger font-weight-bold" asp-validation-summary="ModelOnly"></div>
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit" asp-area="" asp-controller="Account" asp-action="Register">
+                Зарегистрироваться
+            </button>
+
+        </div>
+        <div class="col"></div>
+    </div>
+</form>
