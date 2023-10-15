@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
@@ -12,22 +13,24 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         private readonly IOrdersRepository ordersRepository;
+        private readonly IMapper mapper;
 
-        public OrderController(IOrdersRepository ordersRepository)
+        public OrderController(IOrdersRepository ordersRepository, IMapper mapper)
         {
             this.ordersRepository = ordersRepository;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
         {
             var orders = ordersRepository.GetAll();
-            var ordersVM = orders.Select(or => or.ToOrderViewModel()).ToList(); 
+            var ordersVM = mapper.Map<ICollection<OrderViewModel>>(orders);
             return View(ordersVM);
         }
         public IActionResult Detail(Guid id)
         {
             var orderDb = ordersRepository.TryGetByOrderId(id);
-            var orderVM = orderDb.ToOrderViewModel();
+            var orderVM = mapper.Map<OrderViewModel>(orderDb);
             return View(orderVM);
         }
 

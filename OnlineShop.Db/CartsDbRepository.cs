@@ -124,6 +124,7 @@ namespace OnlineShop.Db
             return dataBaseContext.Carts
                 .Include(x => x.Items)
                 .ThenInclude(x => x.Product)
+                .ThenInclude(x => x.Images)
                 .FirstOrDefault(x => x.UserId == userId);
         }
     }

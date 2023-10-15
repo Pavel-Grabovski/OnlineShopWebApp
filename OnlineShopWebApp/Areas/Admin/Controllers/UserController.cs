@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Helpers;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
@@ -15,17 +17,19 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         private readonly UserManager<User> usersManager;
         private readonly RoleManager<IdentityRole> rolesManager;
         private readonly ImagesProvider imagesProvider;
-        public UserController(UserManager<User> usersManager, RoleManager<IdentityRole> rolesManager, ImagesProvider imagesProvider)
+        private readonly IMapper mapper;
+        public UserController(UserManager<User> usersManager, RoleManager<IdentityRole> rolesManager, ImagesProvider imagesProvider, IMapper mapper)
         {
             this.usersManager = usersManager;
             this.rolesManager = rolesManager;
             this.imagesProvider = imagesProvider;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
         {
             var users = usersManager.Users.ToList(); 
-            return View(users.Select(x => x.ToUserViewModel()).ToList());
+            return View(users.Select(user => mapper.Map<UserViewModel>(user)).ToList());
         }
         public IActionResult Delete(string email)
         {
@@ -37,8 +41,8 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         public IActionResult Details(string email)
         {
             var user = usersManager.FindByEmailAsync(email).Result;
-
-            return View(user.ToUserViewModel());
+            var userVM = mapper.Map<UserViewModel>(user);
+            return View(userVM);
         }
 
         public IActionResult ChangePassword(string email)
@@ -102,7 +106,7 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             var user = usersManager.FindByEmailAsync(email).Result;
             if(user != null)
             {
-                var editUser = user.ToEditUserViewModel();
+                var editUser = mapper.Map<EditUserViewModel>(user);
                 return View(editUser);
             }
             return RedirectToAction(nameof(Index));
@@ -127,7 +131,8 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
 
             usersManager.UpdateAsync(user).Wait();
 
-            return View(nameof(Details), editUserViewModel.ToUserViewModel());
+            var userVM = mapper.Map<UserViewModel>(editUserViewModel);
+            return View(nameof(Details), userVM);
         }
 
     }

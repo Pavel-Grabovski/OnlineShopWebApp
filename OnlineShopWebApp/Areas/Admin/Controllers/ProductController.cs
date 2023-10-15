@@ -5,6 +5,7 @@ using OnlineShopWebApp.Models;
 using OnlineShopWebApp.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using OnlineShopWebApp.Areas.Admin.Models;
+using AutoMapper;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
@@ -14,17 +15,20 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     {
         private readonly IProductsRepository productRepository;
         private readonly ImagesProvider imagesProvider;
+        private readonly IMapper mapper;
 
-        public ProductController(IProductsRepository productRepository, ImagesProvider imagesProvider = null)
+        public ProductController(IProductsRepository productRepository, ImagesProvider imagesProvider = null, IMapper mapper = null)
         {
             this.productRepository = productRepository;
             this.imagesProvider = imagesProvider;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
         {
             var productsDb = productRepository.GetAll();
-            var productsViewModels = productsDb.ToProductsViewModels();
+            var productsViewModels = mapper.Map<ICollection<ProductViewModel>>(productsDb);
+
             return View(productsViewModels);
         }
         public IActionResult Delete(Guid id)
@@ -39,7 +43,7 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             var product = productRepository.TryGetById(id);
             if (product != null)
             {
-                var editProductVM = product.ToEditProductViewModel();
+                var editProductVM = mapper.Map<EditProductViewModel>(product);
                 return View(editProductVM);
             }
             return RedirectToAction(nameof(Index));
@@ -61,7 +65,9 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
                     editProductVM.ImagesPaths.AddRange(addedImagesPath);
                 }
 
-                productRepository.Update(editProductVM.ToProduct());
+                var product = mapper.Map<Product>(editProductVM);
+
+                productRepository.Update(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(nameof(Edit), editProductVM);
@@ -79,7 +85,9 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             {
                 var imagesPaths = imagesProvider.SafeFiles(AddProductVM.Name, AddProductVM.UploadedFiles, ImageFolders.Products);
 
-                productRepository.Add(AddProductVM.ToProduct(imagesPaths));
+                var product = mapper.Map<Product>((AddProductVM, imagesPaths));
+
+                productRepository.Add(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(nameof(Add), AddProductVM);
