@@ -4,9 +4,9 @@ namespace OnlineShop.Db
 {
     public interface IFavoriteRepository
     {
-        void Add(string userId, Product product);
-        ICollection<Product> GetAll(string userId);
-        void Remove(string userId, Product product);
-        void Clear(string userId);
+        Task AddAsync(string userId, Product product);
+        Task<ICollection<Product>> GetAllAsync(string userId);
+        Task RemoveAsync(string userId, Product product);
+        Task ClearAsync(string userId);
     }
 }

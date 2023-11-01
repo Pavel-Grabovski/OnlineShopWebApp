@@ -13,31 +13,31 @@ namespace OnlineShopWebApp
             this.dataBaseContext = dataBaseContext;
         }
 
-        public void Add(Product product)
+        public async Task AddAsync(Product product)
         {
             dataBaseContext.Products.Add(product);
-            dataBaseContext.SaveChanges();
+            await dataBaseContext.SaveChangesAsync();
         }
 
-        public void Delete(Product product)
+        public async Task DeleteAsync(Product product)
         {
             dataBaseContext.Products.Remove(product);
-            dataBaseContext.SaveChanges();
+            await dataBaseContext.SaveChangesAsync();
         }
 
-        public ICollection<Product> GetAll()
+        public async Task<ICollection<Product>> GetAllAsync()
         {
-            return dataBaseContext.Products.Include(x => x.Images).ToList();
+            return await dataBaseContext.Products.Include(x => x.Images).ToArrayAsync();
         }
 
-        public Product TryGetById(Guid id)
+        public async Task<Product> TryGetByIdAsync(Guid id)
         {
-            return dataBaseContext.Products.Include(x => x.Images).FirstOrDefault(product => product.Id == id);
+            return await dataBaseContext.Products.Include(x => x.Images).FirstOrDefaultAsync(product => product.Id == id);
         }
 
-        public void Update(Product product)
+        public async Task UpdateAsync(Product product)
         {
-            var existingProduct = dataBaseContext.Products.Include(x => x.Images).FirstOrDefault(x => x.Id == product.Id);
+            var existingProduct = await dataBaseContext.Products.Include(x => x.Images).FirstOrDefaultAsync(x => x.Id == product.Id);
             if (existingProduct != null)
             {
                 existingProduct.Name = product.Name;
@@ -54,7 +54,7 @@ namespace OnlineShopWebApp
 
                 }
 
-                dataBaseContext.SaveChanges();
+                await dataBaseContext.SaveChangesAsync();
             }
         }
     }

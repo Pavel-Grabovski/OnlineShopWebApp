@@ -20,33 +20,33 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = favoriteRepository.GetAll(Constants.UserId);
+            var products = await favoriteRepository.GetAllAsync(Constants.UserId);
             var productsViewModels = mapper.Map<ICollection<ProductViewModel>>(products);
             return View(productsViewModels);
         }
-        public IActionResult Add(Guid productId)
+        public async Task<IActionResult> AddAsync(Guid productId)
         {
-            var product = productRepository.TryGetById(productId);
+            var product = await productRepository.TryGetByIdAsync(productId);
             if(product != null)
             {
-                favoriteRepository.Add(Constants.UserId, product);
+               await favoriteRepository.AddAsync(Constants.UserId, product);
             }
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Remove(Guid productId)
+        public async Task<IActionResult> RemoveAsync(Guid productId)
         {
-            var product = productRepository.TryGetById(productId);
+            var product = await productRepository.TryGetByIdAsync(productId);
             if (product != null)
             {
-                favoriteRepository.Remove(Constants.UserId, product);
+                await favoriteRepository.RemoveAsync(Constants.UserId, product);
             }
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Clear()
+        public async Task<IActionResult> ClearAsync()
         {
-            favoriteRepository.Clear(Constants.UserId);
+            await favoriteRepository.ClearAsync(Constants.UserId);
             return RedirectToAction(nameof(Index));
         }
     }

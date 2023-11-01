@@ -28,11 +28,11 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(Login login)
+        public async Task<IActionResult> LoginAsync(Login login)
         {
             if (ModelState.IsValid)
             {
-                var result = signInManager.PasswordSignInAsync(login.Email, login.Password, login.RememberMe, false).Result;
+                var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, login.RememberMe, false);
                 if (result.Succeeded)
                 {
                     if (login.ReturnUrl != null)
@@ -53,7 +53,7 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(Register register)
+        public async Task<IActionResult> RegisterAsync(Register register)
         {
             if(register.Email == register.Password)
             {
@@ -62,7 +62,7 @@ namespace OnlineShopWebApp.Controllers
             if(ModelState.IsValid && register.Password == register.ConfirmPassword)
             {
                 var user = new User { UserName = register.Email, Email = register.Email };
-                var result = userManager.CreateAsync(user, register.Password).Result;
+                var result = await userManager.CreateAsync(user, register.Password);
                 if (result.Succeeded)
                 {
                     signInManager.SignInAsync(user, false).Wait();

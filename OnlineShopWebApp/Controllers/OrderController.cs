@@ -21,9 +21,9 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = cartsRepository.TryGetByUserId(Constants.UserId);
+            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
             if (cart != null)
             {
                 ViewBag.Cart = mapper.Map<CartViewModel>(cart);
@@ -33,19 +33,19 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Buy(UserDeliveryInfoViewModel userInfo)
+        public async Task<IActionResult> BuyAsync(UserDeliveryInfoViewModel userInfo)
         {
             if(ModelState.IsValid)
             {
-                var cartDb = cartsRepository.TryGetByUserId(Constants.UserId);
+                var cartDb = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
                 var order = new Order
                 {
                     UserInfo = mapper.Map<UserDeliveryInfo>(userInfo),
                     Items = cartDb.Items
                 };
 
-                ordersRepository.Add(order);
-                cartsRepository.Remove(Constants.UserId);
+                await ordersRepository.AddAsync(order);
+                await cartsRepository.RemoveAsync(Constants.UserId);
                 return View();
             }
             return View(nameof(Index), userInfo);

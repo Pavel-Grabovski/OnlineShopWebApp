@@ -24,23 +24,24 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var productsDb = productRepository.GetAll();
+            var productsDb = await productRepository.GetAllAsync();
             var productsViewModels = mapper.Map<ICollection<ProductViewModel>>(productsDb);
 
             return View(productsViewModels);
         }
-        public IActionResult Delete(Guid id)
+
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var product = productRepository.TryGetById(id);
-            productRepository.Delete(product);
+            var product = await productRepository.TryGetByIdAsync(id);
+            await productRepository.DeleteAsync(product);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> EditAsync(Guid id)
         {
-            var product = productRepository.TryGetById(id);
+            var product = await productRepository.TryGetByIdAsync(id);
             if (product != null)
             {
                 var editProductVM = mapper.Map<EditProductViewModel>(product);
@@ -50,7 +51,7 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(EditProductViewModel editProductVM)
+        public async Task<IActionResult> EditAsync(EditProductViewModel editProductVM)
         {
             if (ModelState.IsValid)
             {
@@ -67,19 +68,19 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
 
                 var product = mapper.Map<Product>(editProductVM);
 
-                productRepository.Update(product);
+                await productRepository.UpdateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
-            return View(nameof(Edit), editProductVM);
+            return View(nameof(EditAsync), editProductVM);
 
         }
-        public IActionResult Add()
+        public IActionResult AddAsync()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Add(AddProductViewModel AddProductVM)
+        public async Task<IActionResult> AddAsync(AddProductViewModel AddProductVM)
         {
             if (ModelState.IsValid)
             {
@@ -87,10 +88,10 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
 
                 var product = mapper.Map<Product>((AddProductVM, imagesPaths));
 
-                productRepository.Add(product);
+                await productRepository.AddAsync(product);
                 return RedirectToAction(nameof(Index));
             }
-            return View(nameof(Add), AddProductVM);
+            return View("Add", AddProductVM);
         }
     }
 }

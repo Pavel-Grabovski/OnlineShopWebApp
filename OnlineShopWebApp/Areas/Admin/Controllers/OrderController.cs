@@ -21,22 +21,22 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var orders = ordersRepository.GetAll();
+            var orders = await ordersRepository.GetAllAsync();
             var ordersVM = mapper.Map<ICollection<OrderViewModel>>(orders);
             return View(ordersVM);
         }
-        public IActionResult Detail(Guid id)
+        public async Task<IActionResult> Detail(Guid id)
         {
-            var orderDb = ordersRepository.TryGetByOrderId(id);
+            var orderDb = await ordersRepository.TryGetByOrderIdAsync(id);
             var orderVM = mapper.Map<OrderViewModel>(orderDb);
             return View(orderVM);
         }
 
-        public IActionResult SaveStatus(Guid id, OrderStatusViewModel status)
+        public async Task<IActionResult> SaveStatusAsync(Guid id, OrderStatusViewModel status)
         {
-            ordersRepository.UpdateStatus(id, (OrderStatus)(int)status);
+            await ordersRepository.UpdateStatusAsync(id, (OrderStatus)(int)status);
             return RedirectToAction(nameof(Index));
         }
     }
