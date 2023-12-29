@@ -31,16 +31,16 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             var users = usersManager.Users.ToList(); 
             return View(users.Select(user => mapper.Map<UserViewModel>(user)).ToList());
         }
-        public IActionResult Delete(string email)
+        public async Task<IActionResult> DeleteAsync(string email)
         {
-            var user = usersManager.FindByEmailAsync(email).Result;
-            usersManager.DeleteAsync(user).Wait();
+            var user = await usersManager.FindByEmailAsync(email);
+            await usersManager.DeleteAsync(user);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(string email)
+        public async Task<IActionResult> DetailsAsync(string email)
         {
-            var user = usersManager.FindByEmailAsync(email).Result;
+            var user = await usersManager.FindByEmailAsync(email);
             var userVM = mapper.Map<UserViewModel>(user);
             return View(userVM);
         }
@@ -54,10 +54,10 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             return View(changePassword);
         }
 
-        public IActionResult EditRights(string email)
+        public async Task<IActionResult> EditRightsAsync(string email)
         {
-            var user = usersManager.FindByEmailAsync(email).Result;
-            var userRoles = usersManager.GetRolesAsync(user).Result;
+            var user = await usersManager.FindByEmailAsync(email);
+            var userRoles = await usersManager.GetRolesAsync(user);
             var roles = rolesManager.Roles.ToList();
             var model = new EditRightsViewModel
             {
@@ -70,21 +70,21 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditRights(string email, Dictionary<string, bool> userRolesViewModel)
+        public async Task<IActionResult> EditRightsAsync(string email, Dictionary<string, bool> userRolesViewModel)
         {
             var userSelectedRoles = userRolesViewModel.Select(x => x.Key);
 
-            var user = usersManager.FindByEmailAsync(email).Result;
-            var userRoles = usersManager.GetRolesAsync(user).Result;
+            var user = await usersManager.FindByEmailAsync(email);
+            var userRoles = await usersManager.GetRolesAsync(user);
 
-            usersManager.RemoveFromRolesAsync(user, userRoles).Wait();
-            usersManager.AddToRolesAsync(user, userSelectedRoles).Wait();
+            await usersManager.RemoveFromRolesAsync(user, userRoles);
+            await usersManager.AddToRolesAsync(user, userSelectedRoles);
 
             return Redirect($"/Admin/User/Details?email={email}");
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(ChangePasswordViewModel changePassword)
+        public async Task<IActionResult> ChangePasswordAsync(ChangePasswordViewModel changePassword)
         {
             if (changePassword.Email == changePassword.Password)
             {
@@ -92,18 +92,18 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             }
             if (ModelState.IsValid)
             {
-                var user = usersManager.FindByEmailAsync(changePassword.Email).Result;
+                var user = await usersManager.FindByEmailAsync(changePassword.Email);
                 var newHashPassword = usersManager.PasswordHasher.HashPassword(user, changePassword.Password);
                 user.PasswordHash = newHashPassword;
-                usersManager.UpdateAsync(user).Wait();
+                await usersManager.UpdateAsync(user);
                 return RedirectToAction(nameof(Index));
             }
             return View(changePassword);
         }
 
-        public IActionResult Edit(string email)
+        public async Task<IActionResult> EditAsync(string email)
         {
-            var user = usersManager.FindByEmailAsync(email).Result;
+            var user = await usersManager.FindByEmailAsync(email);
             if(user != null)
             {
                 var editUser = mapper.Map<EditUserViewModel>(user);
@@ -132,7 +132,7 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             usersManager.UpdateAsync(user).Wait();
 
             var userVM = mapper.Map<UserViewModel>(editUserViewModel);
-            return View(nameof(Details), userVM);
+            return View("Details", userVM);
         }
 
     }

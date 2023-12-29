@@ -4,11 +4,11 @@ namespace OnlineShop.Db
 {
     public interface ICartsRepository
     {
-        void Add(string userId, Product product);
-        Cart TryGetByUserId(string userId);
-        void DecreaseAmount(string userId, Product product);
-        void Remove(string userId, Product product);
-        void Remove(string userId);
-        void Clear(string userId);
+        Task AddAsync(string userId, Product product);
+        Task<Cart> TryGetByUserIdAsync(string userId);
+        Task DecreaseAmountAsync(string userId, Product product);
+        Task RemoveAsync(string userId, Product product);
+        Task RemoveAsync(string userId);
+        Task ClearAsync(string userId);
     }
 }

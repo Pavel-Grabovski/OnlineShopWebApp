@@ -16,9 +16,9 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var productsDb = productRepository.GetAll();
+            var productsDb = await productRepository.GetAllAsync();
             var productsViewModels = mapper.Map<ICollection<ProductViewModel>>(productsDb);
             return View(productsViewModels);
         }

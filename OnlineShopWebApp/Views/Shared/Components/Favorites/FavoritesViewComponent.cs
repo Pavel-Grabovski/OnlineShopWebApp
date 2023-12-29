@@ -12,9 +12,9 @@ namespace OnlineShopWebApp.Views.Shared.Components.Favorites
         {
             this.favoritesRepository = favoritesRepository;
         }
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var favorites = favoritesRepository.GetAll(Constants.UserId);
+            var favorites = await favoritesRepository.GetAllAsync(Constants.UserId);
             int productCount = favorites?.Count ?? 0;
 
             return View("Favorites", productCount);

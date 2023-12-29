@@ -37,7 +37,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 
 
-// Add services to the container.
+// AddAsync services to the container.
 builder.Services.AddTransient<IFavoriteRepository, FavoritesDbRepository>();
 builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
 builder.Services.AddTransient<ICartsRepository, CartsDbRepository>();

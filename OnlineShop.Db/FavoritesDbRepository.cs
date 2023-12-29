@@ -12,41 +12,40 @@ namespace OnlineShop.Db
             this.dataBaseContext = dataBaseContext;
         }
 
-        public void Add(string userId, Product product)
+        public async Task AddAsync(string userId, Product product)
         {
-            var favoriteProduct = dataBaseContext.FavoriteProducts
-                .FirstOrDefault(x => x.UserId == userId && x.Product.Id == product.Id);
+            var favoriteProduct = await dataBaseContext.FavoriteProducts
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.Product.Id == product.Id);
             if(favoriteProduct == null)
             {
                 dataBaseContext.FavoriteProducts.Add(new FavoriteProduct { Product =  product, UserId = userId });
-                dataBaseContext.SaveChanges();
+                await dataBaseContext.SaveChangesAsync();
             }
         }
 
-        public void Clear(string userId)
+        public async Task ClearAsync(string userId)
         {
-            var favoriteProducts = dataBaseContext.FavoriteProducts.Where(u => u.UserId == userId).ToList();
+            var favoriteProducts = await dataBaseContext.FavoriteProducts.Where(u => u.UserId == userId).ToArrayAsync();
             dataBaseContext.FavoriteProducts.RemoveRange(favoriteProducts);
-            dataBaseContext.SaveChanges();
+            await dataBaseContext.SaveChangesAsync();
         }
 
-        public void Remove(string userId, Product product)
+        public async Task RemoveAsync(string userId, Product product)
         {
-            var favoriteProduct = dataBaseContext
-                .FavoriteProducts
-                .FirstOrDefault(u => u.UserId == userId && u.Product.Id == product.Id);
+            var favoriteProduct = await dataBaseContext.FavoriteProducts
+                .FirstOrDefaultAsync(u => u.UserId == userId && u.Product.Id == product.Id);
             if(favoriteProduct != null)
             {
                 dataBaseContext .FavoriteProducts.Remove(favoriteProduct);
-                dataBaseContext.SaveChanges();
+                await dataBaseContext.SaveChangesAsync();
             }
         }
-        public ICollection<Product> GetAll(string userId)
+        public async Task<ICollection<Product>> GetAllAsync(string userId)
         {
-            return dataBaseContext.FavoriteProducts.Where(x => x.UserId == userId)
+            return await dataBaseContext.FavoriteProducts.Where(x => x.UserId == userId)
                 .Include(x => x.Product)
                 .Select(x => x.Product)
-                .ToList();
+                .ToArrayAsync();
         }
     }
 }

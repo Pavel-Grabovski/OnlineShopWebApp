@@ -21,10 +21,10 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = cartsRepository.TryGetByUserId(Constants.UserId);
-            if(cart != null && cart.Items.Count > 0)
+            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
+            if (cart != null && cart.Items.Count > 0)
             {
                 var cartVM = mapper.Map<CartViewModel>(cart);
 
@@ -32,31 +32,33 @@ namespace OnlineShopWebApp.Controllers
             }
             return View();
         }
-        public IActionResult Add(Guid productId)
+        
+        public async Task<IActionResult> AddAsync(Guid productId)
         {
-            var product = productRepository.TryGetById(productId);
-            cartsRepository.Add(Constants.UserId, product);
+            var product = await productRepository.TryGetByIdAsync(productId);
+            await cartsRepository.AddAsync(Constants.UserId, product);
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult DecreaseAmount(Guid productId)
+
+        public async Task<IActionResult> DecreaseAmount(Guid productId)
         {
-            var product = productRepository.TryGetById(productId);
+            var product = await productRepository.TryGetByIdAsync(productId);
             if(product != null)
             {
-                cartsRepository.DecreaseAmount(Constants.UserId, product);
+                await cartsRepository.DecreaseAmountAsync(Constants.UserId, product);
             }
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Remove(Guid productId)
+        public async Task<IActionResult> RemoveAsync(Guid productId)
         {
-            var product = productRepository.TryGetById(productId);
-            cartsRepository.Remove(Constants.UserId, product);
+            var product = await productRepository.TryGetByIdAsync(productId);
+            await cartsRepository.RemoveAsync(Constants.UserId, product);
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Clear()
+        public async Task<IActionResult> ClearAsync()
         {
-            cartsRepository.Clear(Constants.UserId);
-            return RedirectToAction("Index");
+            await cartsRepository.ClearAsync(Constants.UserId);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -17,9 +17,9 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index(Guid id)
+        public async Task<IActionResult> Index(Guid id)
         {
-            var product = productRepository.TryGetById(id);
+            var product = await productRepository.TryGetByIdAsync(id);
             if (product != null)
             {
                 var model = mapper.Map<ProductViewModel>(product);
