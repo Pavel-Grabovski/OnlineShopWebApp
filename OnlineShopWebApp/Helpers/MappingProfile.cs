@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using OnlineShop.Db.Models;
+using OnlineShop.Entities;
 using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Models;
 

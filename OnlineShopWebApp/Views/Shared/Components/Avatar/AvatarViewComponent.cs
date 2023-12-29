@@ -1,15 +1,13 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp.Areas.Admin.Models;
-using OnlineShopWebApp.Helpers;
+
+using AutoMapper;
+using OnlineShop.Entities;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Views.Shared.Components.Cart
 {
-    public class AvatarViewComponent : ViewComponent
+	public class AvatarViewComponent : ViewComponent
     {
         private readonly UserManager<User> userManager;
         private readonly IMapper mapper;

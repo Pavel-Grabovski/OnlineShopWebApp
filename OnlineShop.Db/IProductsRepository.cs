@@ -1,13 +1,12 @@
-﻿using OnlineShop.Db.Models;
+﻿using OnlineShop.Entities;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db;
+
+public interface IProductsRepository
 {
-    public interface IProductsRepository
-    {
-        Task<ICollection<Product>> GetAllAsync();
-        Task<Product> TryGetByIdAsync(Guid id);
-        Task DeleteAsync(Product product);
-        Task AddAsync(Product product);
-        Task UpdateAsync(Product product);
-    }
+    Task<ICollection<Product>> GetAllAsync();
+    Task<Product> TryGetByIdAsync(Guid id);
+    Task DeleteAsync(Product product);
+    Task AddAsync(Product product);
+    Task UpdateAsync(Product product);
 }

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
+using OnlineShop.Entities;
 using OnlineShopWebApp;
 using OnlineShopWebApp.Helpers;
 using Serilog;

@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OnlineShop.Db\OnlineShop.Db.csproj" />
+    <ProjectReference Include="..\OnlineShop.Entities\OnlineShop.Entities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

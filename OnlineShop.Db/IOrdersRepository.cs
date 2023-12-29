@@ -1,12 +1,11 @@
-﻿using OnlineShop.Db.Models;
+﻿using OnlineShop.Entities;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db;
+
+public interface IOrdersRepository
 {
-    public interface IOrdersRepository
-    {
-        Task AddAsync(Order order);
-        Task<ICollection<Order>> GetAllAsync();
-        Task<Order> TryGetByOrderIdAsync(Guid id);
-        Task UpdateStatusAsync(Guid id, OrderStatus status);
-    }
+    Task AddAsync(Order order);
+    Task<ICollection<Order>> GetAllAsync();
+    Task<Order> TryGetByOrderIdAsync(Guid id);
+    Task UpdateStatusAsync(Guid id, OrderStatus status);
 }

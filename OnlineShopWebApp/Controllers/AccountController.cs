@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp.Models;
+
 using Serilog;
+using OnlineShop.Db;
+using OnlineShop.Entities;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {

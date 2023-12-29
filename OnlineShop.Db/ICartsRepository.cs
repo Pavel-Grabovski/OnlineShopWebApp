@@ -1,14 +1,13 @@
-﻿using OnlineShop.Db.Models;
+﻿using OnlineShop.Entities;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db;
+
+public interface ICartsRepository
 {
-    public interface ICartsRepository
-    {
-        Task AddAsync(string userId, Product product);
-        Task<Cart> TryGetByUserIdAsync(string userId);
-        Task DecreaseAmountAsync(string userId, Product product);
-        Task RemoveAsync(string userId, Product product);
-        Task RemoveAsync(string userId);
-        Task ClearAsync(string userId);
-    }
+    Task AddAsync(string userId, Product product);
+    Task<Cart> TryGetByUserIdAsync(string userId);
+    Task DecreaseAmountAsync(string userId, Product product);
+    Task RemoveAsync(string userId, Product product);
+    Task RemoveAsync(string userId);
+    Task ClearAsync(string userId);
 }
