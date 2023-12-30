@@ -2,10 +2,10 @@
 
 namespace OnlineShop.BL.Interfaces
 {
-	public interface IOrdersRepository
+	public interface IOrdersServicies
 	{
 		Task AddAsync(Order order);
-		Task<ICollection<Order>> GetAllAsync();
+		Task<IEnumerable<Order>> GetAllAsync();
 		Task<Order> TryGetByOrderIdAsync(Guid id);
 		Task UpdateStatusAsync(Guid id, OrderStatus status);
 	}

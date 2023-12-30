@@ -2,9 +2,9 @@
 
 namespace OnlineShop.BL.Interfaces
 {
-	public interface IProductsRepository
+	public interface IProductsServicies
 	{
-		Task<ICollection<Product>> GetAllAsync();
+		Task<IEnumerable<Product>> GetAllAsync();
 		Task<Product> TryGetByIdAsync(Guid id);
 		Task DeleteAsync(Product product);
 		Task AddAsync(Product product);

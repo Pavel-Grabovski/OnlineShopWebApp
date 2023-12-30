@@ -2,10 +2,10 @@
 
 namespace OnlineShop.Db.Interfaces;
 
-public interface IFavoriteRepository
+public interface IFavoriteServicies
     {
         Task AddAsync(string userId, Product product);
-        Task<ICollection<Product>> GetAllAsync(string userId);
+        Task<IEnumerable<Product>> GetAllAsync(string userId);
         Task RemoveAsync(string userId, Product product);
         Task ClearAsync(string userId);
     }
