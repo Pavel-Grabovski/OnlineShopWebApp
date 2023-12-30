@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OnlineShop.Db.Models;
+using OnlineShop.Db.Entities;
 
 namespace OnlineShop.Db
 {
-    public class DataBaseContext : DbContext
+	public class DataBaseContext : DbContext
     {
         // Доступ к таблицам
         public DbSet<Product> Products { get; set; }

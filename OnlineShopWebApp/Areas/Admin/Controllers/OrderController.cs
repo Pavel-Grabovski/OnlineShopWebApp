@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
+using OnlineShop.Db.Entities;
 using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
-    [Area(Constants.AdminRoleName)]
+	[Area(Constants.AdminRoleName)]
     [Authorize(Roles = Constants.AdminRoleName)]
     public class OrderController : Controller
     {

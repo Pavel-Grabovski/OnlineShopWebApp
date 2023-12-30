@@ -1,8 +1,8 @@
-﻿using OnlineShop.Db.Models;
+﻿using OnlineShop.Db.Entities;
 
 namespace OnlineShop.Db.Interfaces
 {
-    public interface IProductsRepository
+	public interface IProductsRepository
     {
         Task<ICollection<Product>> GetAllAsync();
         Task<Product> TryGetByIdAsync(Guid id);

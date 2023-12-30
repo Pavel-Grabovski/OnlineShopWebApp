@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using OnlineShop.Db.Entities;
 using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Helpers
 {
-    public class MappingProfile : Profile
+	public class MappingProfile : Profile
     {
         public MappingProfile()
         {

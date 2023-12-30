@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db.Entities;
 using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
 
 namespace OnlineShop.Db.Repositories
 {
-    public class OrdersDbRepository : IOrdersRepository
+	public class OrdersDbRepository : IOrdersRepository
     {
         private readonly DataBaseContext dataBaseContext;
 

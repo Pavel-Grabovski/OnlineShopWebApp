@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OnlineShop.Db.Models;
+using OnlineShop.Db.Entities;
 
 namespace OnlineShop.Db
 {
-    public class IdentityInitializer
+	public class IdentityInitializer
     {
         public static void Initialize(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {

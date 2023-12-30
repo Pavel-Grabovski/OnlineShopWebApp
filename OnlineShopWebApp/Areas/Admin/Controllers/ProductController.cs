@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 using OnlineShopWebApp.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using OnlineShopWebApp.Areas.Admin.Models;
 using AutoMapper;
 using OnlineShop.Db.Interfaces;
+using OnlineShop.Db.Entities;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
-    [Area(Constants.AdminRoleName)]
+	[Area(Constants.AdminRoleName)]
     [Authorize(Roles = Constants.AdminRoleName)]
     public class ProductController : Controller
     {

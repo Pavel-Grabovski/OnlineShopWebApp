@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
+using OnlineShop.Db.Entities;
 using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories;
 using OnlineShopWebApp.Helpers;
 using Serilog;

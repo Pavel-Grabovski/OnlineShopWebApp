@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
+using OnlineShop.Db.Entities;
 using OnlineShopWebApp.Models;
 using Serilog;
 
 namespace OnlineShopWebApp.Controllers
 {
-    public class AccountController : Controller
+	public class AccountController : Controller
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;

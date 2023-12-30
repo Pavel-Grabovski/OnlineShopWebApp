@@ -1,8 +1,8 @@
-﻿using OnlineShop.Db.Models;
+﻿using OnlineShop.Db.Entities;
 
 namespace OnlineShop.Db.Interfaces
 {
-    public interface ICartsRepository
+	public interface ICartsRepository
     {
         Task AddAsync(string userId, Product product);
         Task<Cart> TryGetByUserIdAsync(string userId);

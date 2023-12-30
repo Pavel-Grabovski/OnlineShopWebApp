@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
+using OnlineShop.Db.Entities;
 using OnlineShop.Db.Interfaces;
-using OnlineShop.Db.Models;
 
 namespace OnlineShop.Db.Repositories
 {
-    public class ProductsDbRepository : IProductsRepository
+	public class ProductsDbRepository : IProductsRepository
     {
         private readonly DataBaseContext dataBaseContext;
 

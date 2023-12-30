@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
+using OnlineShop.Db.Entities;
 using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
-    [Area(Constants.AdminRoleName)]
+	[Area(Constants.AdminRoleName)]
     [Authorize(Roles = Constants.AdminRoleName)]
     public class UserController : Controller
     {

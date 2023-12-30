@@ -1,8 +1,8 @@
-﻿using OnlineShop.Db.Models;
+﻿using OnlineShop.Db.Entities;
 
 namespace OnlineShop.Db.Interfaces
 {
-    public interface IOrdersRepository
+	public interface IOrdersRepository
     {
         Task AddAsync(Order order);
         Task<ICollection<Order>> GetAllAsync();
