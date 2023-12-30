@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
+using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 
-namespace OnlineShopWebApp
+namespace OnlineShop.Db.Repositories
 {
     public class ProductsDbRepository : IProductsRepository
     {
@@ -44,7 +45,7 @@ namespace OnlineShopWebApp
                 existingProduct.Description = product.Description;
                 existingProduct.Cost = product.Cost;
 
-                if(product.Images != null &&  product.Images.Count > 0)
+                if (product.Images != null && product.Images.Count > 0)
                 {
                     foreach (var image in product.Images)
                     {

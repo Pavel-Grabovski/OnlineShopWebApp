@@ -6,6 +6,7 @@ using OnlineShopWebApp.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using OnlineShopWebApp.Areas.Admin.Models;
 using AutoMapper;
+using OnlineShop.Db.Interfaces;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {

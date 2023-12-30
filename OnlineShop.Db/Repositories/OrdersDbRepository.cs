@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db.Repositories
 {
     public class OrdersDbRepository : IOrdersRepository
     {

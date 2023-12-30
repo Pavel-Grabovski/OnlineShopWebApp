@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
+using OnlineShop.Db.Interfaces;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Views.Shared.Components.Favorites

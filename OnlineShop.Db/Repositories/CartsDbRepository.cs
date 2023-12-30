@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db.Repositories
 {
     public class CartsDbRepository : ICartsRepository
     {
@@ -59,12 +60,12 @@ namespace OnlineShop.Db
         public async Task ClearAsync(string userId)
         {
             var cart = await TryGetByUserIdAsync(userId);
-            if(cart != null)
+            if (cart != null)
             {
                 dataBaseContext?.CartItems?.RemoveRange(cart.Items);
                 cart?.Items?.Clear();
                 dataBaseContext.Carts.Remove(cart);
-                await dataBaseContext.SaveChangesAsync() ;
+                await dataBaseContext.SaveChangesAsync();
             }
         }
 
@@ -97,9 +98,9 @@ namespace OnlineShop.Db
                 if (cartItem != null)
                 {
                     cart.Items.Remove(cartItem);
-                    dataBaseContext.CartItems.Remove(cartItem); 
+                    dataBaseContext.CartItems.Remove(cartItem);
 
-                    if(cart.Items.Count == 0)
+                    if (cart.Items.Count == 0)
                     {
                         dataBaseContext.Carts.Remove(cart);
                     }

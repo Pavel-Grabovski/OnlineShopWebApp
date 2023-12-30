@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
+using OnlineShop.Db.Interfaces;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 

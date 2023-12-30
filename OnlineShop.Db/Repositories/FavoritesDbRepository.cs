@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db.Repositories
 {
     public class FavoritesDbRepository : IFavoriteRepository
     {
@@ -16,9 +17,9 @@ namespace OnlineShop.Db
         {
             var favoriteProduct = await dataBaseContext.FavoriteProducts
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.Product.Id == product.Id);
-            if(favoriteProduct == null)
+            if (favoriteProduct == null)
             {
-                dataBaseContext.FavoriteProducts.Add(new FavoriteProduct { Product =  product, UserId = userId });
+                dataBaseContext.FavoriteProducts.Add(new FavoriteProduct { Product = product, UserId = userId });
                 await dataBaseContext.SaveChangesAsync();
             }
         }
@@ -34,9 +35,9 @@ namespace OnlineShop.Db
         {
             var favoriteProduct = await dataBaseContext.FavoriteProducts
                 .FirstOrDefaultAsync(u => u.UserId == userId && u.Product.Id == product.Id);
-            if(favoriteProduct != null)
+            if (favoriteProduct != null)
             {
-                dataBaseContext .FavoriteProducts.Remove(favoriteProduct);
+                dataBaseContext.FavoriteProducts.Remove(favoriteProduct);
                 await dataBaseContext.SaveChangesAsync();
             }
         }
