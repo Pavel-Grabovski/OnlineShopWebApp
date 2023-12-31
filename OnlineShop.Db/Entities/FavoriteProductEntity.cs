@@ -1,8 +1,8 @@
 ﻿namespace OnlineShop.Db.Entities;
 
-public class FavoriteProduct
+public class FavoriteProductEntity
 {
 	public Guid Id { get; set; }
 	public string UserId { get; set; }
-	public Product Product { get; set; }
+	public ProductEntity Product { get; set; }
 }

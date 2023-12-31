@@ -2,7 +2,7 @@
 
 namespace OnlineShop.Db.Entities;
 
-public class User : IdentityUser
+public class UserEntity : IdentityUser
 {
 	public string? Name { get; set; } = string.Empty;
 	public string? Patronymic { get; set; } = string.Empty;

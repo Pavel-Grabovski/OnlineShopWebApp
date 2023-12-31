@@ -1,6 +1,6 @@
 ﻿namespace OnlineShop.Db.Entities;
 
-public enum OrderStatus
+public enum OrderStatusEntity
 {
 	Created,
 	Processed,

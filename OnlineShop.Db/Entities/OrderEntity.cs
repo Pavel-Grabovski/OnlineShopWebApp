@@ -1,15 +1,15 @@
 ﻿namespace OnlineShop.Db.Entities;
 
-public class Order
+public class OrderEntity
 {
 	public Guid Id { get; set; }
 	public UserDeliveryInfo UserInfo { get; set; }
-	public ICollection<CartItem> Items { get; set; }
+	public ICollection<CartItemEntity> Items { get; set; }
 	public DateTime CreateDataTime { get; set; }
-	public OrderStatus Status { get; set; }
-	public Order()
+	public OrderStatusEntity Status { get; set; }
+	public OrderEntity()
 	{
-		Status = OrderStatus.Created;
+		Status = OrderStatusEntity.Created;
 		CreateDataTime = DateTime.Now;
 	}
 }
