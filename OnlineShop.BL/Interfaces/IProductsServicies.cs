@@ -1,13 +1,12 @@
 ﻿using OnlineShop.BL.Domains;
 
-namespace OnlineShop.BL.Interfaces
+namespace OnlineShop.BL.Interfaces;
+
+public interface IProductsServicies
 {
-	public interface IProductsServicies
-	{
-		Task<IEnumerable<Product>> GetAllAsync();
-		Task<Product> TryGetByIdAsync(Guid id);
-		Task DeleteAsync(Product product);
-		Task AddAsync(Product product);
-		Task UpdateAsync(Product product);
-	}
+	Task<IEnumerable<Product>> GetAllAsync();
+	Task<Product> TryGetByIdAsync(Guid id);
+	Task DeleteAsync(Product product);
+	Task AddAsync(Product product);
+	Task UpdateAsync(Product product);
 }
