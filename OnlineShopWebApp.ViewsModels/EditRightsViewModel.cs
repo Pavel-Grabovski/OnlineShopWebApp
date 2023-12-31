@@ -1,4 +1,4 @@
-﻿namespace OnlineShopWebApp.Areas.Admin.Models
+﻿namespace OnlineShopWebApp.ViewsModels
 {
     public class EditRightsViewModel
     {
