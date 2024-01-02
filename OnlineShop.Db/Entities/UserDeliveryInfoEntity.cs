@@ -1,6 +1,6 @@
 ﻿namespace OnlineShop.Db.Entities;
 
-public class UserDeliveryInfo
+public class UserDeliveryInfoEntity
 {
     public Guid Id { get; set; }
     public string Email { get; set; }

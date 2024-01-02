@@ -14,29 +14,39 @@ namespace OnlineShop.Db.Repositories
             this.dataBaseContext = dataBaseContext;
         }
 
-        public async Task AddAsync(Product product)
+        public async Task AddAsync(ProductEntity product)
         {
             dataBaseContext.Products.Add(product);
             await dataBaseContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Product product)
+        public async Task DeleteAsync(ProductEntity product)
         {
             dataBaseContext.Products.Remove(product);
             await dataBaseContext.SaveChangesAsync();
         }
 
-        public async Task<ICollection<Product>> GetAllAsync()
+        public async Task DeleteAsync(Guid id)
+        {
+            var existingProduct = await dataBaseContext.Products
+                .Include(product => product.Images)
+                .FirstOrDefaultAsync(product => product.Id == id);
+
+            dataBaseContext.Products.Remove(existingProduct);
+            await dataBaseContext.SaveChangesAsync(); 
+        }
+
+        public async Task<ICollection<ProductEntity>> GetAllAsync()
         {
             return await dataBaseContext.Products.Include(x => x.Images).ToArrayAsync();
         }
 
-        public async Task<Product> TryGetByIdAsync(Guid id)
+        public async Task<ProductEntity> TryGetByIdAsync(Guid id)
         {
             return await dataBaseContext.Products.Include(x => x.Images).FirstOrDefaultAsync(product => product.Id == id);
         }
 
-        public async Task UpdateAsync(Product product)
+        public async Task UpdateAsync(ProductEntity product)
         {
             var existingProduct = await dataBaseContext.Products.Include(x => x.Images).FirstOrDefaultAsync(x => x.Id == product.Id);
             if (existingProduct != null)

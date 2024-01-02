@@ -26,11 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OnlineShop.Db\OnlineShop.Db.csproj" />
+    <Folder Include="wwwroot\images\Products\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\Products\" />
+    <ProjectReference Include="..\OnlineShop.BL\OnlineShop.BL.csproj" />
+    <ProjectReference Include="..\OnlineShop.Db\OnlineShop.Db.csproj" />
+    <ProjectReference Include="..\OnlineShop.Mappers\OnlineShop.Mappers.csproj" />
+    <ProjectReference Include="..\OnlineShopWebApp.ViewsModels\OnlineShopWebApp.ViewsModels.csproj" />
   </ItemGroup>
 
 </Project>

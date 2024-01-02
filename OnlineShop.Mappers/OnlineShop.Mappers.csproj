@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.22" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\OnlineShop.BL\OnlineShop.BL.csproj" />
     <ProjectReference Include="..\OnlineShop.Db\OnlineShop.Db.csproj" />
+    <ProjectReference Include="..\OnlineShopWebApp.ViewsModels\OnlineShopWebApp.ViewsModels.csproj" />
   </ItemGroup>
 
 </Project>

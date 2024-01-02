@@ -7,7 +7,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Order" asp-action="Index">
+                            @* <a class="nav-link text-dark" asp-area="Admin" asp-controller="Order" asp-action="Index">
+                                Админ
+                            </a> *@
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Product" asp-action="Index">
                                 Админ
                             </a>
                         </li>
@@ -17,17 +20,17 @@
             <div class="col-md-3 text-end">
                 <ul class="navbar-nav flex-grow-1">
                     <li>
-                        @await Component.InvokeAsync("Cart")
+                        @* @await Component.InvokeAsync("Cart") *@
                     </li>
                     <li>
-                        @await Component.InvokeAsync("Favorites")
+                       @*  @await Component.InvokeAsync("Favorites") *@
                     </li>
                     <li>
                         @if (User.Identity.IsAuthenticated)
                         {
                             <div class="dropdown">
                                 <a class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                   @await Component.InvokeAsync("Avatar")
+                                   @* @await Component.InvokeAsync("Avatar") *@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>

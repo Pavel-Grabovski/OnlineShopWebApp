@@ -1,26 +1,26 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Interfaces;
-using OnlineShopWebApp.Helpers;
-using OnlineShopWebApp.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
-namespace OnlineShopWebApp.Controllers
+using OnlineShop.BL.Interfaces;
+using OnlineShop.BL.Domains;
+using OnlineShopWebApp.ViewsModels;
+
+namespace OnlineShopWebApp.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly IProductsServicies productsServicies;
+    private readonly IMapper mapper;
+    public HomeController(IProductsServicies productsServicies, IMapper mapper)
     {
-        private readonly IProductsRepository productRepository;
-        private readonly IMapper mapper;
-        public HomeController(IProductsRepository productRepository, IMapper mapper)
-        {
-            this.productRepository = productRepository;
-            this.mapper = mapper;
-        }
+        this.productsServicies = productsServicies;
+        this.mapper = mapper;
+    }
 
-        public async Task<IActionResult> Index()
-        {
-            var productsDb = await productRepository.GetAllAsync();
-            var productsViewModels = mapper.Map<ICollection<ProductViewModel>>(productsDb);
-            return View(productsViewModels);
-        }
+    public async Task<IActionResult> Index()
+    {
+		IEnumerable<Product> products = await productsServicies.GetAllAsync();
+		IEnumerable<ProductViewModel> productsViewModels = mapper.Map<IEnumerable<ProductViewModel>>(products);
+        return View(productsViewModels);
     }
 }
