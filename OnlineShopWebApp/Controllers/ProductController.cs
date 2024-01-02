@@ -8,10 +8,10 @@ namespace OnlineShopWebApp.Controllers;
 
 public class ProductController : Controller
 {
-    private readonly IProductsServicies productsServicies;
+    private readonly IProductsServices productsServicies;
     private readonly IMapper mapper;
 
-    public ProductController(IProductsServicies productsServicies, IMapper mapper)
+    public ProductController(IProductsServices productsServicies, IMapper mapper)
     {
         this.productsServicies = productsServicies;
         this.mapper = mapper;

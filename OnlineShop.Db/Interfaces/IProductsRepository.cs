@@ -4,7 +4,7 @@ namespace OnlineShop.Db.Interfaces
 {
 	public interface IProductsRepository
     {
-        Task<ICollection<ProductEntity>> GetAllAsync();
+        Task<IEnumerable<ProductEntity>> GetAllAsync();
         Task<ProductEntity> TryGetByIdAsync(Guid id);
         Task DeleteAsync(ProductEntity product);
         Task DeleteAsync(Guid id);

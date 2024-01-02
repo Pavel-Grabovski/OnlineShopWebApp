@@ -36,8 +36,8 @@ public class ProductsServices : IProductsServices
 
     public async Task<IEnumerable<Product>> GetAllAsync()
 	{
-		var productsDb = await productsRepository.GetAllAsync();
-		var products = productsDb.Select(productDB => mapper.Map<Product>(productDB));
+        IEnumerable<ProductEntity> productsDb = await productsRepository.GetAllAsync();
+        IEnumerable<Product> products = productsDb.Select(productDB => mapper.Map<Product>(productDB));
 
 		return products;
 	}
