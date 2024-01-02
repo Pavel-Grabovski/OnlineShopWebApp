@@ -14,20 +14,20 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers;
 [Authorize(Roles = Constants.AdminRoleName)]
 public class ProductController : Controller
 {
-    private readonly IProductsServicies productsServicies;
+    private readonly IProductsServices productsServices;
     private readonly ImagesProvider imagesProvider;
     private readonly IMapper mapper;
 
-    public ProductController(IProductsServicies productsServicies, ImagesProvider imagesProvider = null, IMapper mapper = null)
+    public ProductController(IProductsServices productsServicies, ImagesProvider imagesProvider = null, IMapper mapper = null)
     {
-        this.productsServicies = productsServicies;
+        this.productsServices = productsServicies;
         this.imagesProvider = imagesProvider;
         this.mapper = mapper;
     }
 
     public async Task<IActionResult> Index()
     {
-        IEnumerable<Product> products = await productsServicies.GetAllAsync();
+        IEnumerable<Product> products = await productsServices.GetAllAsync();
         IEnumerable<ProductViewModel> productsViewModels = mapper.Map<IEnumerable<ProductViewModel>>(products);
 
         return View(productsViewModels);
@@ -35,13 +35,13 @@ public class ProductController : Controller
 
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        await productsServicies.DeleteAsync(id);
+        await productsServices.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
 
     public async Task<IActionResult> EditAsync(Guid id)
     {
-        var product = await productsServicies.TryGetByIdAsync(id);
+        var product = await productsServices.TryGetByIdAsync(id);
         if (product == null)
             return RedirectToAction(nameof(Index));
 
@@ -65,7 +65,7 @@ public class ProductController : Controller
 
         var product = mapper.Map<Product>(editProductVM);
 
-        await productsServicies.UpdateAsync(product);
+        await productsServices.UpdateAsync(product);
         return RedirectToAction(nameof(Index));
     }
 
@@ -84,7 +84,7 @@ public class ProductController : Controller
 
         var product = mapper.Map<Product>((AddProductVM, imagesPaths));
 
-        await productsServicies.AddAsync(product);
+        await productsServices.AddAsync(product);
         return RedirectToAction(nameof(Index));
     }
 }
