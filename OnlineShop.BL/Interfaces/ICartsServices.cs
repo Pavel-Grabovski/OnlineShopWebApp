@@ -2,7 +2,7 @@
 
 namespace OnlineShop.BL.Interfaces;
 
-public interface ICartsServicies
+public interface ICartsServices
 {
 	Task AddAsync(string userId, Product product);
 	Task<Cart> TryGetByUserIdAsync(string userId);

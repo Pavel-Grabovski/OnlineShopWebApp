@@ -2,7 +2,7 @@
 
 namespace OnlineShop.Db.Interfaces;
 
-public interface IFavoriteServicies
+public interface IFavoriteServices
 {
 	Task AddAsync(string userId, Product product);
 	Task<IEnumerable<Product>> GetAllAsync(string userId);

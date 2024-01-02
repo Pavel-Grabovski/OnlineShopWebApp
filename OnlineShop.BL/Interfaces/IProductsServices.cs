@@ -2,7 +2,7 @@
 
 namespace OnlineShop.BL.Interfaces;
 
-public interface IProductsServicies
+public interface IProductsServices
 {
 	Task<IEnumerable<Product>> GetAllAsync();
 	Task<Product> TryGetByIdAsync(Guid id);

@@ -2,7 +2,7 @@
 
 namespace OnlineShop.BL.Interfaces;
 
-public interface IOrdersServicies
+public interface IOrdersServices
 {
 	Task AddAsync(Order order);
 	Task<IEnumerable<Order>> GetAllAsync();
