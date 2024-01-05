@@ -37,10 +37,10 @@
             <li>
                 <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="ChangePassword" asp-route-email="@Model.Email">Смена пароля</a></li>
             <li>
-                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Edit" asp-route-email="@Model.Email">Редактирование данных</a>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="EditData" asp-route-email="@Model.Email">Редактирование данных</a>
             </li>
             <li>
-                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="EditRights" asp-route-email="@Model.Email">Редактировать права</a>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="EditRoles" asp-route-email="@Model.Email">Редактировать права</a>
             </li>
             <li>
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#Delete" >Удалить</a>

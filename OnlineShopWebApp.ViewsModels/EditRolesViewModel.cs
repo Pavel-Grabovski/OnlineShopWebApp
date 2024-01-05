@@ -1,6 +1,6 @@
 ﻿namespace OnlineShopWebApp.ViewsModels
 {
-    public class EditRightsViewModel
+    public class EditRolesViewModel
     {
         public string Email { get; set; }
         public List<RoleViewModel> UserRoles { get; set; }

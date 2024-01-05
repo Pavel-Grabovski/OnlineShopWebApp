@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp.ViewsModels;
 
-public class Login
+public class LoginViewModel
 {
     [Required(ErrorMessage = "Не указан E-mail")]
     [EmailAddress(ErrorMessage = "Неправильно введен E-mail")]

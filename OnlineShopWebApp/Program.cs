@@ -49,7 +49,9 @@ builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
 builder.Services.AddTransient<ICartsRepository, CartsDbRepository>();
 builder.Services.AddTransient<IOrdersRepository, OrdersDbRepository>();
 
-builder.Services.AddTransient<IProductsServicies, ProductsServicies>();
+builder.Services.AddTransient<IProductsServices, ProductsServices>();
+builder.Services.AddTransient<IUsersServices, UsersServices>();
+builder.Services.AddTransient<IRolesServices, RolesServices>();
 
 builder.Services.AddSingleton<ImagesProvider>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));

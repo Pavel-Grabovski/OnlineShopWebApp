@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp.ViewsModels;
 
-public class Register
+public class RegisterViewModel
 {
     [Required(ErrorMessage = "Не указан E-mail!")]
     [EmailAddress(ErrorMessage = "Неправильно введен E-mail!")]

@@ -1,139 +1,128 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
-using OnlineShop.Db.Entities;
-using OnlineShopWebApp.Areas.Admin.Models;
+
+using AutoMapper;
+using OnlineShopWebApp.ViewsModels;
 using OnlineShopWebApp.Helpers;
-using OnlineShopWebApp.Models;
+using OnlineShop.BL.Interfaces;
+using OnlineShop.BL.Domains;
+using OnlineShop.BL;
 
-namespace OnlineShopWebApp.Areas.Admin.Controllers
+namespace OnlineShopWebApp.Areas.Admin.Controllers;
+
+[Area(Constants.AdminRoleName)]
+[Authorize(Roles = Constants.AdminRoleName)]
+public class UserController : Controller
 {
-	[Area(Constants.AdminRoleName)]
-    [Authorize(Roles = Constants.AdminRoleName)]
-    public class UserController : Controller
+    private readonly IUsersServices usersServices;
+    private readonly IRolesServices rolesServices;
+    private readonly ImagesProvider imagesProvider;
+    private readonly IMapper mapper;
+
+    public UserController(IUsersServices usersServices, IRolesServices rolesServices, ImagesProvider imagesProvider, IMapper mapper)
     {
-        private readonly UserManager<User> usersManager;
-        private readonly RoleManager<IdentityRole> rolesManager;
-        private readonly ImagesProvider imagesProvider;
-        private readonly IMapper mapper;
-        public UserController(UserManager<User> usersManager, RoleManager<IdentityRole> rolesManager, ImagesProvider imagesProvider, IMapper mapper)
-        {
-            this.usersManager = usersManager;
-            this.rolesManager = rolesManager;
-            this.imagesProvider = imagesProvider;
-            this.mapper = mapper;
-        }
+        this.usersServices = usersServices;
+        this.rolesServices = rolesServices;
+        this.imagesProvider = imagesProvider;
+        this.mapper = mapper;
+    }
 
-        public IActionResult Index()
+    public async Task<IActionResult> Index()
+    {
+        var users = await usersServices.GetAllAsync();
+        return View(users.Select(user => mapper.Map<UserViewModel>(user)).ToArray());
+    }
+    public async Task<IActionResult> DetailsAsync(string email)
+    {
+        var user = await usersServices.FindByEmailAsync(email);
+        var userVM = mapper.Map<UserViewModel>(user);
+        return View(userVM);
+    }
+
+    public IActionResult ChangePassword(string email)
+    {
+        var changePassword = new ChangePasswordViewModel()
         {
-            var users = usersManager.Users.ToList(); 
-            return View(users.Select(user => mapper.Map<UserViewModel>(user)).ToList());
+            Email = email
+        };
+        return View(changePassword);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ChangePasswordAsync(ChangePasswordViewModel changePasswordVM)
+    {
+        if (changePasswordVM.Email == changePasswordVM.Password)
+        {
+            ModelState.AddModelError("", "Логин и пароль не должны совпадать");
         }
-        public async Task<IActionResult> DeleteAsync(string email)
-        {
-            var user = await usersManager.FindByEmailAsync(email);
-            await usersManager.DeleteAsync(user);
+        if (! ModelState.IsValid)
+            return View(changePasswordVM);
+
+        var changePassword = mapper.Map<ChangePassword>(changePasswordVM);
+        await usersServices.ChangePasswordAsync(changePassword);
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> EditDataAsync(string email)
+    {
+        var user = await usersServices.FindByEmailAsync(email);
+
+        if (user == null)
             return RedirectToAction(nameof(Index));
-        }
 
-        public async Task<IActionResult> DetailsAsync(string email)
-        {
-            var user = await usersManager.FindByEmailAsync(email);
-            var userVM = mapper.Map<UserViewModel>(user);
-            return View(userVM);
-        }
+        var editUser = mapper.Map<EditUserViewModel>(user);
+        return View(editUser);
+    }
 
-        public IActionResult ChangePassword(string email)
-        {
-            var changePassword = new ChangePasswordViewModel()
-            {
-                Email = email
-            };
-            return View(changePassword);
-        }
-
-        public async Task<IActionResult> EditRightsAsync(string email)
-        {
-            var user = await usersManager.FindByEmailAsync(email);
-            var userRoles = await usersManager.GetRolesAsync(user);
-            var roles = rolesManager.Roles.ToList();
-            var model = new EditRightsViewModel
-            {
-                Email = user.Email,
-                UserRoles = userRoles.Select(x => new RoleViewModel { Name = x }).ToList(),
-                AllRoles = roles.Select(x => new RoleViewModel { Name = x.Name }).ToList()
-            };
-            return View(model);
-            
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> EditRightsAsync(string email, Dictionary<string, bool> userRolesViewModel)
-        {
-            var userSelectedRoles = userRolesViewModel.Select(x => x.Key);
-
-            var user = await usersManager.FindByEmailAsync(email);
-            var userRoles = await usersManager.GetRolesAsync(user);
-
-            await usersManager.RemoveFromRolesAsync(user, userRoles);
-            await usersManager.AddToRolesAsync(user, userSelectedRoles);
-
-            return Redirect($"/Admin/User/Details?email={email}");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ChangePasswordAsync(ChangePasswordViewModel changePassword)
-        {
-            if (changePassword.Email == changePassword.Password)
-            {
-                ModelState.AddModelError("", "Логин и пароль не должны совпадать");
-            }
-            if (ModelState.IsValid)
-            {
-                var user = await usersManager.FindByEmailAsync(changePassword.Email);
-                var newHashPassword = usersManager.PasswordHasher.HashPassword(user, changePassword.Password);
-                user.PasswordHash = newHashPassword;
-                await usersManager.UpdateAsync(user);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(changePassword);
-        }
-
-        public async Task<IActionResult> EditAsync(string email)
-        {
-            var user = await usersManager.FindByEmailAsync(email);
-            if(user != null)
-            {
-                var editUser = mapper.Map<EditUserViewModel>(user);
-                return View(editUser);
-            }
+    [HttpPost]
+    public async Task<IActionResult> EditDataAsync(EditUserViewModel editUserViewModel)
+    {
+        if (editUserViewModel == null)
             return RedirectToAction(nameof(Index));
-        }
 
-
-
-        [HttpPost]
-        public IActionResult Edit(EditUserViewModel editUserViewModel)
+        if (editUserViewModel.UploadFile != null)
         {
-            var user = usersManager.FindByEmailAsync(editUserViewModel.Email).Result;
-            user.PhoneNumber = editUserViewModel.Phone;
-            user.Name = editUserViewModel.Name;
-            user.Surname = editUserViewModel.Surname;
-            user.Patronymic = editUserViewModel.Patronymic;
-
-            if(editUserViewModel.UploadFile != null)
-            {
-                var imagesPath = imagesProvider.SafeFiles(editUserViewModel.Email.Replace('@', '_'), editUserViewModel.UploadFile, ImageFolders.Profiles);
-                user.ImagePath = imagesPath;
-            }
-
-            usersManager.UpdateAsync(user).Wait();
-
-            var userVM = mapper.Map<UserViewModel>(editUserViewModel);
-            return View("Details", userVM);
+            var imagesPath = imagesProvider.SafeFiles(editUserViewModel.Email.Replace('@', '_'), editUserViewModel.UploadFile, ImageFolders.Profiles);
+            editUserViewModel.ImagePath = imagesPath;
         }
 
+        var user = mapper.Map<User>(editUserViewModel);
+        await usersServices.EditDataAsync(user);
+
+        var userVM = mapper.Map<UserViewModel>(user);
+        return View("Details", userVM);
+    }
+
+
+    public async Task<IActionResult> EditRolesAsync(string email)
+    {
+        var user = await usersServices.FindByEmailAsync(email);
+        IEnumerable<string> userRoles = await usersServices.GetRolesAsync(email);
+        IEnumerable<Role> roles = rolesServices.GetAllRoles();
+
+        var model = new EditRolesViewModel
+        {
+            Email = user.Email,
+            UserRoles = userRoles.Select(x => new RoleViewModel { Name = x }).ToList(),
+            AllRoles = roles.Select(x => new RoleViewModel { Name = x.Name }).ToList()
+        };
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditRolesAsync(string email, Dictionary<string, bool> userRolesViewModel)
+    {
+        IEnumerable<string> userSelectedRoles = userRolesViewModel.Select(x => x.Key).ToArray();
+
+        await usersServices.SetNewRolesAsync(email, userSelectedRoles);
+
+        return Redirect($"/Admin/User/Details?email={email}");
+    }
+
+    public async Task<IActionResult> DeleteAsync(string email)
+    {
+        await usersServices.DeleteAsync(email);
+        return RedirectToAction(nameof(Index));
     }
 }

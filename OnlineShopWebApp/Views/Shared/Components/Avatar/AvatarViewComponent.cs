@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.BL.Interfaces;
 using OnlineShop.Db.Entities;
 using OnlineShopWebApp.ViewsModels;
 
@@ -8,20 +9,21 @@ namespace OnlineShopWebApp.Views.Shared.Components.Cart
 {
 	public class AvatarViewComponent : ViewComponent
     {
-        private readonly UserManager<UserEntity> userManager;
+        private readonly IUsersServices usersServices;
         private readonly IMapper mapper;
-        public AvatarViewComponent(UserManager<UserEntity> userManager, IMapper mapper)
+
+        public AvatarViewComponent(IUsersServices usersServices, IMapper mapper)
         {
-            this.userManager = userManager;
+            this.usersServices = usersServices;
             this.mapper = mapper;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             if (User.Identity.IsAuthenticated)
             {
                 var email = User.Identity.Name;
-                var user = userManager.FindByEmailAsync(email).Result;
+                var user = await usersServices.FindByEmailAsync(email);
                 if(user != null)
                 {
                     var userVM = mapper.Map<UserViewModel>(user);
