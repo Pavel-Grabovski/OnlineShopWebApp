@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OnlineShop.Db.Models;
+using OnlineShop.Db.Entities;
 
 namespace OnlineShop.Db
 {
-    public class IdentityInitializer
+	public class IdentityInitializer
     {
-        public static void Initialize(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static void Initialize(UserManager<UserEntity> userManager, RoleManager<IdentityRole> roleManager)
         {
             var adminEmail = "admin@admin.com";
             var password = "Qwerty123!";
@@ -19,7 +19,7 @@ namespace OnlineShop.Db
             }
             if (userManager.FindByNameAsync(adminEmail).Result == null)
             {
-                var admin = new User { Email = adminEmail, UserName = adminEmail };
+                var admin = new UserEntity { Email = adminEmail, UserName = adminEmail };
                 var result = userManager.CreateAsync(admin, password).Result;
                 if (result.Succeeded)
                 {

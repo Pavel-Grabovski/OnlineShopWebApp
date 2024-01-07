@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.BL;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp.Helpers;
-using OnlineShopWebApp.Models;
+using OnlineShop.Db.Entities;
+using OnlineShop.Db.Interfaces;
+using OnlineShopWebApp.ViewsModels;
+using Constants = OnlineShop.BL.Constants;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -23,7 +25,7 @@ namespace OnlineShopWebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
+            var cart = await cartsRepository.TryGetByLoginAsync(Constants.UserId);
             if (cart != null)
             {
                 ViewBag.Cart = mapper.Map<CartViewModel>(cart);
@@ -37,15 +39,15 @@ namespace OnlineShopWebApp.Controllers
         {
             if(ModelState.IsValid)
             {
-                var cartDb = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
-                var order = new Order
+                var cartDb = await cartsRepository.TryGetByLoginAsync(Constants.UserId);
+                var order = new OrderEntity
                 {
-                    UserInfo = mapper.Map<UserDeliveryInfo>(userInfo),
+                    UserInfo = mapper.Map<UserDeliveryInfoEntity>(userInfo),
                     Items = cartDb.Items
                 };
 
                 await ordersRepository.AddAsync(order);
-                await cartsRepository.RemoveAsync(Constants.UserId);
+                await cartsRepository.ClearAsync(Constants.UserId);
                 return View();
             }
             return View(nameof(Index), userInfo);

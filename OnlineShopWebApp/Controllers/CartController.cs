@@ -1,30 +1,32 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp.Helpers;
-using OnlineShopWebApp.Models;
+using OnlineShop.BL.Interfaces;
+using OnlineShop.Db.Interfaces;
+using OnlineShopWebApp.ViewsModels;
 
 namespace OnlineShopWebApp.Controllers
 {
     [Authorize]
     public class CartController : Controller
     {
-        private readonly IProductsRepository productRepository;
-        private readonly ICartsRepository cartsRepository;
+
+        private readonly ICartsServices cartsServices;
+        private readonly IProductsServices productsServices;
         private readonly IMapper mapper;
-        public CartController(IProductsRepository productRepository, ICartsRepository cartsRepository, IMapper mapper)
+
+        public CartController(ICartsServices cartsServices, IProductsServices productsServices, IMapper mapper)
         {
-            this.productRepository = productRepository;
-            this.cartsRepository = cartsRepository;
+            this.cartsServices = cartsServices;
+            this.productsServices = productsServices;
             this.mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
-            if (cart != null && cart.Items.Count > 0)
+            var cart = await cartsServices.TryGetByLoginAsync(User.Identity.Name);
+
+            if (cart != null && cart.Items.Count() > 0)
             {
                 var cartVM = mapper.Map<CartViewModel>(cart);
 
@@ -35,29 +37,23 @@ namespace OnlineShopWebApp.Controllers
         
         public async Task<IActionResult> AddAsync(Guid productId)
         {
-            var product = await productRepository.TryGetByIdAsync(productId);
-            await cartsRepository.AddAsync(Constants.UserId, product);
+            await cartsServices.AddAsync(User.Identity.Name, productId);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> DecreaseAmount(Guid productId)
         {
-            var product = await productRepository.TryGetByIdAsync(productId);
-            if(product != null)
-            {
-                await cartsRepository.DecreaseAmountAsync(Constants.UserId, product);
-            }
+            await cartsServices.DecreaseAmountAsync(User.Identity.Name, productId);
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> RemoveAsync(Guid productId)
         {
-            var product = await productRepository.TryGetByIdAsync(productId);
-            await cartsRepository.RemoveAsync(Constants.UserId, product);
+            await cartsServices.RemoveAsync(User.Identity.Name, productId);
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> ClearAsync()
         {
-            await cartsRepository.ClearAsync(Constants.UserId);
+            await cartsServices.ClearAsync(User.Identity.Name);
             return RedirectToAction(nameof(Index));
         }
     }

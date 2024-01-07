@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.BL;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp.Helpers;
-using OnlineShopWebApp.Models;
+using OnlineShop.Db.Entities;
+using OnlineShop.Db.Interfaces;
+using OnlineShopWebApp.ViewsModels;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
-    [Area(Constants.AdminRoleName)]
-    [Authorize(Roles = Constants.AdminRoleName)]
+    [Area(OnlineShop.BL.Constants.AdminRoleName)]
+    [Authorize(Roles = OnlineShop.BL.Constants.AdminRoleName)]
     public class OrderController : Controller
     {
         private readonly IOrdersRepository ordersRepository;
@@ -36,7 +37,7 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> SaveStatusAsync(Guid id, OrderStatusViewModel status)
         {
-            await ordersRepository.UpdateStatusAsync(id, (OrderStatus)(int)status);
+            await ordersRepository.UpdateStatusAsync(id, (OrderStatusEntity)(int)status);
             return RedirectToAction(nameof(Index));
         }
     }

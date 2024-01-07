@@ -9,7 +9,7 @@
             this.appEnvironment = appEnvironment;
         }
 
-        public ICollection<string> SafeFiles(string name, IFormFile[] files, ImageFolders folder)
+        public IEnumerable<string> SafeFiles(string name, IFormFile[] files, ImageFolders folder)
         {
             var imagePaths = new List<string>();
             if(files != null && files.Length > 0)

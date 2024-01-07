@@ -22,7 +22,7 @@ namespace OnlineShop.Db.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Cart", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.CartEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,7 +31,7 @@ namespace OnlineShop.Db.Migrations
                     b.Property<DateTime>("CreateDataTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -40,7 +40,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.CartItem", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.CartItemEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,10 +49,10 @@ namespace OnlineShop.Db.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("CartId")
+                    b.Property<Guid?>("CartEntityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("OrderId")
+                    b.Property<Guid?>("OrderEntityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProductId")
@@ -60,16 +60,16 @@ namespace OnlineShop.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
+                    b.HasIndex("CartEntityId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderEntityId");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.FavoriteProduct", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.FavoriteProductEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,7 +89,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("FavoriteProducts");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Image", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.ImageEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,7 +123,7 @@ namespace OnlineShop.Db.Migrations
                         });
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Order", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.OrderEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -145,7 +145,7 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Product", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.ProductEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -182,7 +182,7 @@ namespace OnlineShop.Db.Migrations
                         });
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.UserDeliveryInfo", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.UserDeliveryInfoEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -214,31 +214,20 @@ namespace OnlineShop.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserDeliveryInfo");
+                    b.ToTable("UserDeliveryInfoEntity");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.CartItem", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.CartItemEntity", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.Cart", null)
+                    b.HasOne("OnlineShop.Db.Entities.CartEntity", null)
                         .WithMany("Items")
-                        .HasForeignKey("CartId");
+                        .HasForeignKey("CartEntityId");
 
-                    b.HasOne("OnlineShop.Db.Models.Order", null)
+                    b.HasOne("OnlineShop.Db.Entities.OrderEntity", null)
                         .WithMany("Items")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderEntityId");
 
-                    b.HasOne("OnlineShop.Db.Models.Product", "Product")
-                        .WithMany("CartItems")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("OnlineShop.Db.Models.FavoriteProduct", b =>
-                {
-                    b.HasOne("OnlineShop.Db.Models.Product", "Product")
+                    b.HasOne("OnlineShop.Db.Entities.ProductEntity", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -247,9 +236,20 @@ namespace OnlineShop.Db.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Image", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.FavoriteProductEntity", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.Product", "Product")
+                    b.HasOne("OnlineShop.Db.Entities.ProductEntity", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("OnlineShop.Db.Entities.ImageEntity", b =>
+                {
+                    b.HasOne("OnlineShop.Db.Entities.ProductEntity", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -258,9 +258,9 @@ namespace OnlineShop.Db.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Order", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.OrderEntity", b =>
                 {
-                    b.HasOne("OnlineShop.Db.Models.UserDeliveryInfo", "UserInfo")
+                    b.HasOne("OnlineShop.Db.Entities.UserDeliveryInfoEntity", "UserInfo")
                         .WithMany()
                         .HasForeignKey("UserInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -269,20 +269,18 @@ namespace OnlineShop.Db.Migrations
                     b.Navigation("UserInfo");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Cart", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.CartEntity", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Order", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.OrderEntity", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Product", b =>
+            modelBuilder.Entity("OnlineShop.Db.Entities.ProductEntity", b =>
                 {
-                    b.Navigation("CartItems");
-
                     b.Navigation("Images");
                 });
 #pragma warning restore 612, 618

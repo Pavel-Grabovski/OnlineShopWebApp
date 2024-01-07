@@ -1,10 +1,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp;
-using OnlineShopWebApp.Helpers;
 using Serilog;
+
+using OnlineShop.BL;
+using OnlineShop.BL.Domains;
+using OnlineShop.BL.Interfaces;
+using OnlineShop.Db;
+using OnlineShop.Db.Entities;
+using OnlineShop.Db.Interfaces;
+using OnlineShop.Db.Repositories;
+using OnlineShop.Mappers;
+using OnlineShopWebApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +26,7 @@ builder.Services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(c
 builder.Services.AddDbContext<IdentityContext>(options =>
             options.UseSqlServer(connection));
 
-builder.Services.AddIdentity<User, IdentityRole>() // Привязываем пользователя к роли
+builder.Services.AddIdentity<UserEntity, IdentityRole>() // Привязываем пользователя к роли
     .AddEntityFrameworkStores<IdentityContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -42,6 +48,13 @@ builder.Services.AddTransient<IFavoriteRepository, FavoritesDbRepository>();
 builder.Services.AddTransient<IProductsRepository, ProductsDbRepository>();
 builder.Services.AddTransient<ICartsRepository, CartsDbRepository>();
 builder.Services.AddTransient<IOrdersRepository, OrdersDbRepository>();
+
+builder.Services.AddTransient<IProductsServices, ProductsServices>();
+builder.Services.AddTransient<ICartsServices, CartsServices>();
+builder.Services.AddTransient<IFavoriteServices, FavoritesServices>();
+builder.Services.AddTransient<IUsersServices, UsersServices>();
+builder.Services.AddTransient<IRolesServices, RolesServices>();
+
 builder.Services.AddSingleton<ImagesProvider>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -78,7 +91,7 @@ using(var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    var userManager = services.GetRequiredService<UserManager<User>>();
+    var userManager = services.GetRequiredService<UserManager<UserEntity>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
     IdentityInitializer.Initialize(userManager, roleManager);

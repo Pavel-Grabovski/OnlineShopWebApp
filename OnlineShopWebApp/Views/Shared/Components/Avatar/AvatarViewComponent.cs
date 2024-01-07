@@ -1,37 +1,33 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp.Areas.Admin.Models;
-using OnlineShopWebApp.Helpers;
-using OnlineShopWebApp.Models;
+using OnlineShop.BL.Interfaces;
+using OnlineShopWebApp.ViewsModels;
 
-namespace OnlineShopWebApp.Views.Shared.Components.Cart
+namespace OnlineShopWebApp.Views.Shared.Components.Cart;
+
+	public class AvatarViewComponent : ViewComponent
 {
-    public class AvatarViewComponent : ViewComponent
-    {
-        private readonly UserManager<User> userManager;
-        private readonly IMapper mapper;
-        public AvatarViewComponent(UserManager<User> userManager, IMapper mapper)
-        {
-            this.userManager = userManager;
-            this.mapper = mapper;
-        }
+    private readonly IUsersServices usersServices;
+    private readonly IMapper mapper;
 
-        public IViewComponentResult Invoke()
+    public AvatarViewComponent(IUsersServices usersServices, IMapper mapper)
+    {
+        this.usersServices = usersServices;
+        this.mapper = mapper;
+    }
+
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        if (User.Identity.IsAuthenticated)
         {
-            if (User.Identity.IsAuthenticated)
+            var email = User.Identity.Name;
+            var user = await usersServices.FindByEmailAsync(email);
+            if(user != null)
             {
-                var email = User.Identity.Name;
-                var user = userManager.FindByEmailAsync(email).Result;
-                if(user != null)
-                {
-                    var userVM = mapper.Map<UserViewModel>(user);
-                    return View("Avatar" , userVM);
-                }
+                var userVM = mapper.Map<UserViewModel>(user);
+                return View("Avatar" , userVM);
             }
-            return View();
         }
+        return View();
     }
 }

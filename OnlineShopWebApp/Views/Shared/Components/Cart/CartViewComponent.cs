@@ -1,26 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
+using OnlineShop.BL.Interfaces;
 
-namespace OnlineShopWebApp.Views.Shared.Components.Cart
+namespace OnlineShopWebApp.Views.Shared.Components.Cart;
+
+public class CartViewComponent : ViewComponent
 {
-    public class CartViewComponent : ViewComponent
+    private readonly ICartsServices cartsServices;
+
+    public CartViewComponent(ICartsServices cartsServices)
     {
-        private readonly ICartsRepository cartsRepository;
+        this.cartsServices = cartsServices;
+    }
 
-        public CartViewComponent(ICartsRepository cartsRepository)
-        {
-            this.cartsRepository = cartsRepository;
-        }
-
-        public async Task<IViewComponentResult> InvokeAsync()
-        {
-            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
-            int productCount = 0;
-            if (cart != null)
-            {
-                productCount = cart.Items.Sum(x => x.Amount);
-            }
-            return View("Cart", productCount);
-        }
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        var cart = await cartsServices.TryGetByLoginAsync(User.Identity.Name);
+        int сount = cart?.Items?.Count() ?? 0;
+        return View("Cart", сount);
     }
 }

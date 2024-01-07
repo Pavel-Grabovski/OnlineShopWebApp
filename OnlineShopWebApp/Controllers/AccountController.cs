@@ -1,38 +1,34 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShopWebApp.Models;
-using Serilog;
-
+using OnlineShop.BL;
+using OnlineShop.BL.Domains;
+using OnlineShop.BL.Interfaces;
+using OnlineShopWebApp.ViewsModels;
 namespace OnlineShopWebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
+        private readonly IUsersServices usersServices;
+        private readonly IRolesServices rolesServices;
 
-        private readonly ILogger<AccountController> logger;
-
-        public AccountController( UserManager<User> userManager, SignInManager<User> singInManager, ILogger<AccountController> logger)
+        public AccountController(IUsersServices usersServices, IRolesServices rolesServices)
         {
-            this.userManager = userManager;
-            this.signInManager = singInManager;
-            this.logger = logger;
+            this.usersServices = usersServices;
+            this.rolesServices = rolesServices;
         }
 
         public IActionResult Login(string returnUrl)
         {
-            return View(new Login() { ReturnUrl = returnUrl});
+            return View(new LoginViewModel() { ReturnUrl = returnUrl});
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoginAsync(Login login)
+        public async Task<IActionResult> LoginAsync(LoginViewModel login)
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, login.RememberMe, false);
+                var result = await usersServices.PasswordSignInAsync(login.Email, login.Password, login.RememberMe);
+
                 if (result.Succeeded)
                 {
                     if (login.ReturnUrl != null)
@@ -49,11 +45,11 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Register(string returnUrl)
         {
-            return View(new Register() { ReturnUrl = returnUrl});
+            return View(new RegisterViewModel() { ReturnUrl = returnUrl});
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterAsync(Register register)
+        public async Task<IActionResult> RegisterAsync(RegisterViewModel register)
         {
             if(register.Email == register.Password)
             {
@@ -61,12 +57,13 @@ namespace OnlineShopWebApp.Controllers
             }
             if(ModelState.IsValid && register.Password == register.ConfirmPassword)
             {
-                var user = new User { UserName = register.Email, Email = register.Email };
-                var result = await userManager.CreateAsync(user, register.Password);
+                var user = new User { Email = register.Email, UserName = register.Email };
+
+                var result = await usersServices.CreateUser(user, register.Password);
+
                 if (result.Succeeded)
                 {
-                    signInManager.SignInAsync(user, false).Wait();
-                    userManager.AddToRoleAsync(user, Constants.UserRoleName).Wait();
+                    usersServices.SignInAsync(user, false).Wait();
                     return RedirectToAction(nameof(Login));
                 }
                 else
@@ -91,25 +88,25 @@ namespace OnlineShopWebApp.Controllers
             return View(register);
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> LogoutAsync()
         {
-            signInManager.SignOutAsync().Wait();
+            await usersServices.SignOutAsync();
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         public IActionResult Profile()
         {
-            var user = userManager.FindByEmailAsync(User.Identity.Name).Result;
+            var user = usersServices.FindByEmailAsync(User.Identity.Name).Result;
             return View();
         }
         public IActionResult Orders()
         {
-            var user = userManager.FindByEmailAsync(User.Identity.Name).Result;
+            var user = usersServices.FindByEmailAsync(User.Identity.Name).Result;
             return View();
         }
         public IActionResult Settings()
         {
-            var user = userManager.FindByEmailAsync(User.Identity.Name).Result;
+            var user = usersServices.FindByEmailAsync(User.Identity.Name).Result;
             return View();
         }
     }

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OnlineShop.Db;
-using OnlineShopWebApp.Areas.Admin.Models;
+using OnlineShop.BL;
+using OnlineShopWebApp.ViewsModels;
 using System.Data;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
