@@ -4,10 +4,9 @@ namespace OnlineShop.BL.Interfaces;
 
 public interface ICartsServices
 {
-	Task AddAsync(string userId, Product product);
-	Task<Cart> TryGetByUserIdAsync(string userId);
-	Task DecreaseAmountAsync(string userId, Product product);
-	Task RemoveAsync(string userId, Product product);
-	Task RemoveAsync(string userId);
-	Task ClearAsync(string userId);
+	Task AddAsync(string login, Guid productId);
+	Task<Cart> TryGetByLoginAsync(string login);
+	Task DecreaseAmountAsync(string login, Guid productId);
+	Task ClearAsync(string login);
+    Task RemoveAsync(string login, Guid productId);
 }

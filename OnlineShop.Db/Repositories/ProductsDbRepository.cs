@@ -36,7 +36,7 @@ namespace OnlineShop.Db.Repositories
             await dataBaseContext.SaveChangesAsync(); 
         }
 
-        public async Task<ICollection<ProductEntity>> GetAllAsync()
+        public async Task<IEnumerable<ProductEntity>> GetAllAsync()
         {
             return await dataBaseContext.Products.Include(x => x.Images).ToArrayAsync();
         }

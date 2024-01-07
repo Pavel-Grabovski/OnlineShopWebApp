@@ -13,22 +13,29 @@ namespace OnlineShop.Db.Repositories
             this.dataBaseContext = dataBaseContext;
         }
 
-        public async Task AddAsync(string userId, Product product)
+        public async Task AddAsync(string login, Guid productId)
         {
-            var cart = await TryGetByUserIdAsync(userId);
+            var productEntity = await dataBaseContext.Products
+                .Include(x => x.Images)
+                .FirstOrDefaultAsync(product => product.Id == productId);
+            if (productEntity == null)
+                return;
+
+            var cart = await TryGetByLoginAsync(login);
+
             if (cart == null)
             {
-                cart = new Cart
+                cart = new CartEntity
                 {
                     Id = Guid.NewGuid(),
-                    UserId = userId,
-                    Items = new List<CartItem>
+                    Login = login,
+                    Items = new List<CartItemEntity>
                     {
-                        new CartItem
+                        new CartItemEntity
                         {
                             Id = Guid.NewGuid(),
                             Amount = 1,
-                            Product= product
+                            Product = productEntity
                         }
                     }
                 };
@@ -36,18 +43,18 @@ namespace OnlineShop.Db.Repositories
             }
             else
             {
-                var cartItem = cart.Items.FirstOrDefault(x => x.Product.Id == product.Id);
+                var cartItem = cart.Items.FirstOrDefault(x => x.Product.Id == productId);
                 if (cartItem != null)
                 {
                     cartItem.Amount++;
                 }
                 else
                 {
-                    cartItem = new CartItem
+                    cartItem = new CartItemEntity
                     {
                         Id = Guid.NewGuid(),
                         Amount = 1,
-                        Product = product
+                        Product = productEntity
                     };
                     cart.Items.Add(cartItem);
                     dataBaseContext.CartItems.Add(cartItem);
@@ -59,7 +66,7 @@ namespace OnlineShop.Db.Repositories
 
         public async Task ClearAsync(string userId)
         {
-            var cart = await TryGetByUserIdAsync(userId);
+            var cart = await TryGetByLoginAsync(userId);
             if (cart != null)
             {
                 dataBaseContext?.CartItems?.RemoveRange(cart.Items);
@@ -69,18 +76,24 @@ namespace OnlineShop.Db.Repositories
             }
         }
 
-        public async Task DecreaseAmountAsync(string userId, Product product)
+        public async Task DecreaseAmountAsync(string userId, Guid productId)
         {
-            var cart = await TryGetByUserIdAsync(userId);
-            if (cart != null && product != null)
+            var productEntity = await dataBaseContext.Products
+                 .Include(x => x.Images)
+                 .FirstOrDefaultAsync(product => product.Id == productId);
+            if (productEntity == null)
+                return;
+
+            var cart = await TryGetByLoginAsync(userId);
+            if (cart != null && productEntity != null)
             {
-                var cartItem = cart.Items.FirstOrDefault(x => x.Product.Id == product.Id);
+                var cartItem = cart.Items.FirstOrDefault(x => x.Product.Id == productEntity.Id);
                 if (cartItem != null)
                 {
                     cartItem.Amount--;
                     if (cartItem.Amount <= 0)
                     {
-                        await RemoveAsync(userId, product);
+                        await RemoveAsync(userId, productId);
 
                     }
                     await dataBaseContext.SaveChangesAsync();
@@ -89,12 +102,18 @@ namespace OnlineShop.Db.Repositories
 
         }
 
-        public async Task RemoveAsync(string userId, Product product)
+        public async Task RemoveAsync(string userId, Guid productId)
         {
-            var cart = await TryGetByUserIdAsync(userId);
+            var productEntity = await dataBaseContext.Products
+                 .Include(x => x.Images)
+                 .FirstOrDefaultAsync(product => product.Id == productId);
+            if (productEntity == null)
+                return;
+
+            var cart = await TryGetByLoginAsync(userId);
             if (cart != null)
             {
-                var cartItem = cart.Items.FirstOrDefault(x => x.Product.Id == product.Id);
+                var cartItem = cart.Items.FirstOrDefault(x => x.Product.Id == productEntity.Id);
                 if (cartItem != null)
                 {
                     cart.Items.Remove(cartItem);
@@ -112,7 +131,7 @@ namespace OnlineShop.Db.Repositories
 
         public async Task RemoveAsync(string userId)
         {
-            var cart = await TryGetByUserIdAsync(userId);
+            var cart = await TryGetByLoginAsync(userId);
             if (cart != null)
             {
                 dataBaseContext.Carts.Remove(cart);
@@ -120,13 +139,13 @@ namespace OnlineShop.Db.Repositories
             }
         }
 
-        public async Task<Cart> TryGetByUserIdAsync(string userId)
+        public async Task<CartEntity> TryGetByLoginAsync(string userId)
         {
             return await dataBaseContext.Carts
                 .Include(x => x.Items)
                 .ThenInclude(x => x.Product)
                 .ThenInclude(x => x.Images)
-                .FirstOrDefaultAsync(x => x.UserId == userId);
+                .FirstOrDefaultAsync(x => x.Login == userId);
         }
     }
 }

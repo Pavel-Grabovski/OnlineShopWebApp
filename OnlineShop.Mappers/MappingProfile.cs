@@ -10,7 +10,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Product, ProductViewModel>()
-            .ForMember(x => x.ImagesPaths, opt => opt.MapFrom(u => u.Images.Select(i => i.Url)));
+            .ForMember(productVM => productVM.ImagesPaths, opt => opt.MapFrom(product => product.Images.Select(i => i.Url)));
         CreateMap<Product, EditProductViewModel>()
             .ForMember(x => x.ImagesPaths, opt => opt.MapFrom(u => u.Images.Select(i => i.Url)));
         CreateMap<EditProductViewModel, Product>()
@@ -42,5 +42,15 @@ public class MappingProfile : Profile
         CreateMap<ProductEntity, Product>().ReverseMap();
         CreateMap<ImageEntity, Image>().ReverseMap();
         CreateMap<UserEntity, User>().ReverseMap();
+
+        CreateMap<CartEntity, Cart>().ReverseMap();
+
+        CreateMap<CartItemEntity, CartItem>().ReverseMap();
+
+        //CreateMap<CartEntity, Cart>()
+        //    .ForMember(cart => cart.Items, opt => opt.MapFrom(cartEntity => cartEntity.Items));
+
+        //CreateMap<CartItemEntity, CartItem>()
+        //    .ForMember(cartItem => cartItem.Product, opt => opt.MapFrom(cartItemEntity => cartItemEntity.Product));
     }
 }
