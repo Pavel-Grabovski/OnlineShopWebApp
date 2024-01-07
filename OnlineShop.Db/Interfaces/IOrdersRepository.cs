@@ -4,9 +4,9 @@ namespace OnlineShop.Db.Interfaces
 {
 	public interface IOrdersRepository
     {
-        Task AddAsync(Order order);
-        Task<ICollection<Order>> GetAllAsync();
-        Task<Order> TryGetByOrderIdAsync(Guid id);
-        Task UpdateStatusAsync(Guid id, OrderStatus status);
+        Task AddAsync(OrderEntity order);
+        Task<ICollection<OrderEntity>> GetAllAsync();
+        Task<OrderEntity> TryGetByOrderIdAsync(Guid id);
+        Task UpdateStatusAsync(Guid id, OrderStatusEntity status);
     }
 }

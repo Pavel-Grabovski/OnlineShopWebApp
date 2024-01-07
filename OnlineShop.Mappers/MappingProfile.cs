@@ -21,8 +21,6 @@ public class MappingProfile : Profile
             .ForMember(x => x.Description, opt => opt.MapFrom(u => u.Item1.Description))
             .ForMember(x => x.Images, opt => opt.MapFrom(u => u.Item2.Select(x => new Image { Url = x })));
 
-
-        //CreateMap<UserViewModel, EditUserViewModel>().ReverseMap();
         CreateMap<User, UserViewModel>();
 
         CreateMap<User, EditUserViewModel>().ReverseMap();
@@ -46,11 +44,5 @@ public class MappingProfile : Profile
         CreateMap<CartEntity, Cart>().ReverseMap();
 
         CreateMap<CartItemEntity, CartItem>().ReverseMap();
-
-        //CreateMap<CartEntity, Cart>()
-        //    .ForMember(cart => cart.Items, opt => opt.MapFrom(cartEntity => cartEntity.Items));
-
-        //CreateMap<CartItemEntity, CartItem>()
-        //    .ForMember(cartItem => cartItem.Product, opt => opt.MapFrom(cartItemEntity => cartItemEntity.Product));
     }
 }

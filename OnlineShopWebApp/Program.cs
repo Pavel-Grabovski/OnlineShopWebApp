@@ -51,6 +51,7 @@ builder.Services.AddTransient<IOrdersRepository, OrdersDbRepository>();
 
 builder.Services.AddTransient<IProductsServices, ProductsServices>();
 builder.Services.AddTransient<ICartsServices, CartsServices>();
+builder.Services.AddTransient<IFavoriteServices, FavoritesServices>();
 builder.Services.AddTransient<IUsersServices, UsersServices>();
 builder.Services.AddTransient<IRolesServices, RolesServices>();
 

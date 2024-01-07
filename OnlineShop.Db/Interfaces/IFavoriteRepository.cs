@@ -1,12 +1,11 @@
 ﻿using OnlineShop.Db.Entities;
 
-namespace OnlineShop.Db.Interfaces
+namespace OnlineShop.Db.Interfaces;
+
+public interface IFavoriteRepository
 {
-	public interface IFavoriteRepository
-    {
-        Task AddAsync(string userId, Product product);
-        Task<ICollection<Product>> GetAllAsync(string userId);
-        Task RemoveAsync(string userId, Product product);
-        Task ClearAsync(string userId);
-    }
+    Task AddAsync(string userId, Guid productId);
+    Task<IEnumerable<ProductEntity>> GetAllAsync(string userId);
+    Task RemoveAsync(string userId, Guid productId);
+    Task ClearAsync(string userId);
 }
