@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShop.Mappers", "Onlin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopWebApp.ViewsModels", "OnlineShopWebApp.ViewsModels\OnlineShopWebApp.ViewsModels.csproj", "{7A8B4378-A7A0-4C03-ABB5-A586AE1F4FC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.WebAPI", "OnlineShop.WebAPI\OnlineShop.WebAPI.csproj", "{CFB5A126-F42E-48B0-8299-80C7C64C1676}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{7A8B4378-A7A0-4C03-ABB5-A586AE1F4FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A8B4378-A7A0-4C03-ABB5-A586AE1F4FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A8B4378-A7A0-4C03-ABB5-A586AE1F4FC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFB5A126-F42E-48B0-8299-80C7C64C1676}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFB5A126-F42E-48B0-8299-80C7C64C1676}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFB5A126-F42E-48B0-8299-80C7C64C1676}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFB5A126-F42E-48B0-8299-80C7C64C1676}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

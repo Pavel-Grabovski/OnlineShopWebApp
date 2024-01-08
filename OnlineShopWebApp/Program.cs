@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 using OnlineShop.BL;
-using OnlineShop.BL.Domains;
 using OnlineShop.BL.Interfaces;
 using OnlineShop.Db;
 using OnlineShop.Db.Entities;
